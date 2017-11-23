@@ -30,8 +30,17 @@ class Fitur
 		$this->instance = $instance;
 	}
 
-	function getInstance()
+	function getInstanceAll()
 	{
-		return $this->instance;
+		$instance = [];
+		foreach ($this->instance as  $valueInstance) {
+			# code...
+			array_push($instance, $valueInstance->getInstance());
+		}
+		return $instance;
+	}
+
+	function getInstanceOne($index){
+		return $this->instance[$index]->getInstance();
 	}
 }

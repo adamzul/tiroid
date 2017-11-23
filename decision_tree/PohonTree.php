@@ -2,36 +2,45 @@
 namespace app\decision_tree;
 
 use Yii;
+use app\decision_tree\Node;
 
 /**
 * 
 */
 class PohonTree 
 {
-	private $fitur;
-	private $instance;
-	function __construct($fitur)
+	
+	private $nodes = [];
+	private $index = 0;
+	private $currentNode;
+	function __construct()
 	{
 		# code...
-		$this->fitur = $fitur;
+		
 	}
 
-	function setFitur($fitur){
-		$this->fitur = $fitur;
+	function makeNode($fitur, $instance){
+		$node = new Node($fitur, $instance);
+		$node->setIndex($this->index);
+		$this->index += 1;
+		array_push($this->nodes, $node);
 	}
 
-	function getFitur()
-	{
-		return $this->fitur;
+	function getNode(){
+		return $this->nodes;
 	}
 
-	function setInstance($instance)
-	{
-		$this->instance = $instance;
+	function getNodeFitur($index){
+		return $this->node[$index]->getFitur();
 	}
 
-	function getInstance()
-	{
-		return $this->instance;
+	function getNodeInstance($index){
+		return $this->node[$index]->getInstance();
 	}
+
+	function setNextNode(){
+		
+	}
+
+
 }

@@ -7,6 +7,8 @@ use app\decision_tree\ObjekJumlahPerlabelPersubset;
 use app\decision_tree\Fitur;
 use app\decision_tree\Dataset;
 use app\decision_tree\Entropy;
+use app\decision_tree\Instance;
+use app\decision_tree\PohonTree;
 
 class DecisionTree
 {
@@ -47,31 +49,14 @@ class DecisionTree
 		    foreach ($row as $keyRow => $valueRow) {
 		    	# code...
 		    	if(!in_array($valueRow[$valueListFitur], $instance))
-		    		array_push($instance, $valueRow[$valueListFitur]);
+		    		array_push($instance, new Instance($valueRow[$valueListFitur]));
 		    }
 		    $fitur->setInstance($instance) ;
 		    array_push($this->fitur, $fitur);
 		}
 	}
 
-	function getInstance(){
-		$i = 0;
-		foreach ($this->dataset->getDataset()[0] as $key => $value)
-		{
-			$this->instance[$i] = [];
-
-			for ($j=0; $j < $this->jumData; $j++) { 
-				# code...
-				if(!in_array($this->dataset->getDataset()[$j][$key], $this->instance[$i])){
-					array_push($this->instance[$i], $this->dataset->getDataset()[$j][$key]);
-				}
-			}
-			$i++;
-			if(count($this->instance) == $this->jumFitur)
-				return $this->instance;
-		}
-		
-	}
+	
 	function getLabel(){
 		$key = 'label';
 		$row = TabelDataset::find()->select($key)->asArray()->all();
@@ -92,7 +77,7 @@ class DecisionTree
 		$jumlahPerinstance = [];
 		$entropy = 0;
 		// $i = 0;
-		foreach ($fitur->getInstance() as  $valueInstance) {
+		foreach ($fitur->getInstanceAll() as  $valueInstance) {
 			# code...
 			foreach ($this->label->getLabel() as   $valueLabel) {
 				# code...
@@ -111,7 +96,7 @@ class DecisionTree
 			} 
 		}
 
-		foreach ($fitur->getInstance() as $valueInstance) {
+		foreach ($fitur->getInstanceAll() as $valueInstance) {
 			# code...
 			$jumlahPerinstance[$valueInstance] = 0;
 		}
@@ -120,20 +105,20 @@ class DecisionTree
 			$jumlahPerinstance[$valueObjekJumlahPerlabelPersubset->getInstance()] += $valueObjekJumlahPerlabelPersubset->getJumlah();
 		}
 
-		for ($i=0; $i < count($fitur->getInstance()); $i++) { 
+		for ($i=0; $i < count($fitur->getInstanceAll()); $i++) { 
 			# code...
 
 			$q[$i] = 0;
 			for ($j=0; $j < count($this->label->getLabel()); $j++) { 
 				# code...
 				if($objekJumlahPerlabelPersubset[$j]->getJumlah() != 0){
-					$temp2 = ($objekJumlahPerlabelPersubset[$j]->getJumlah() / $jumlahPerinstance[$fitur->getInstance()[$i]]);
+					$temp2 = ($objekJumlahPerlabelPersubset[$j]->getJumlah() / $jumlahPerinstance[$fitur->getInstanceAll()[$i]]);
 					$q[$i] += -$temp2 * log($temp2, 2);
 				}
 				else
 					$q[$i] = 0;
 			}
-			$entropy += ($jumlahPerinstance[$fitur->getInstance()[$i]] / $this->dataset->getJumlahData()) * $q[$i];
+			$entropy += ($jumlahPerinstance[$fitur->getInstanceAll()[$i]] / $this->dataset->getJumlahData()) * $q[$i];
 		}
 
 		return $entropy;
@@ -142,16 +127,15 @@ class DecisionTree
 	}
 	
 	function getTerkecilDariArray($entropy){
-		$fiturTerkecil = $entropy[0];
-		$terkecil = $entropy[$fiturTerkecil];
+		$terkecil = $entropy[0];
 		foreach ($entropy as $valueEntropy) {
 			# code...
 			if($valueEntropy->getEntropy() < $terkecil->getEntropy())
 			{
-				$fiturTerkecil = $valueEntropy;
+				$terkecil = $valueEntropy;
 			}
 		}
-		return [$fiturTerkecil , $terkecil];
+		return $terkecil;
 	}
 	function bagiDataBerdasarFitur($fitur, $dataset){
 		foreach ($fitur->getInstance() as $valueInstance) {
@@ -159,13 +143,18 @@ class DecisionTree
 			
 		}
 	}
+	function makeTree(){
+		$pohonTree = new PohonTree();
+		$pohonTree->makeNode($this->fitur[0]->getFitur(), $this->fitur[0]->getInstanceOne(0));
+		return $pohonTree->getNode();
+	}
 
 
 	function main(){
 		$this->getDataset();
 		$this->getJumData();
 		$this->getJumFitur();
-		$this->getInstance();
+		// $this->getInstance();
 		$this->getLabel();
 		$this->getFitur();
 		// $i=2;
@@ -175,7 +164,8 @@ class DecisionTree
 			// $this->entropy[$this->fitur[$i]->getFitur()] = $this->getEntropy($this->dataset, $this->fitur[$i]);
 		}
 		$this->terkecil = $this->getTerkecilDariArray($this->entropy);
-		return $this->terkecil;
+		$node = $this->makeTree();
+		return $this->makeTree();
 	}
 }
-?>
+?> 

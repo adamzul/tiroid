@@ -94,3 +94,22 @@ function getLabel(){
 		}
 		return [$fiturTerkecil => $terkecil];
 	}
+
+	function getInstance(){
+		$i = 0;
+		foreach ($this->dataset->getDataset()[0] as $key => $value)
+		{
+			$this->instance[$i] = [];
+
+			for ($j=0; $j < $this->jumData; $j++) { 
+				# code...
+				if(!in_array($this->dataset->getDataset()[$j][$key], $this->instance[$i])){
+					array_push($this->instance[$i], $this->dataset->getDataset()[$j][$key]);
+				}
+			}
+			$i++;
+			if(count($this->instance) == $this->jumFitur)
+				return $this->instance;
+		}
+		
+	}

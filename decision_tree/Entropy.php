@@ -24,7 +24,7 @@ class Entropy
 	}
 
 	function getFitur(){
-		return $this->fitur;
+		return $this->fitur->getFitur();
 	}
 
 	private function setEntropy($entropy){

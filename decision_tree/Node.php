@@ -12,11 +12,13 @@ class Node
 	private $fitur;
 	private $index;
 	private $instance;
-	function __construct($fitur, $index)
+	private $nextNode;
+	private $label;
+	function __construct($fitur, $instance)
 	{
 		# code...
 		$this->fitur = $fitur;
-		$this->index = $index;
+		$this->instance = $instance;
 	}
 
 	function setFitur($fitur){
@@ -36,5 +38,29 @@ class Node
 	function getInstance()
 	{
 		return $this->instance;
+	}
+
+	function setIndex($index){
+		$this->index = $index;
+	}
+
+	function getIndex(){
+		return $this->index;
+	}
+
+	function setNextNode($index){
+		$this->nextNode = $index;
+	}
+
+	function getNextNode(){
+		return $this->nextNode;
+	}
+
+	function setLabel($label){
+		$this->label = $label;
+	}
+
+	function getLabel(){
+		return $this->label;
 	}
 }
