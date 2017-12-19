@@ -10,11 +10,11 @@ use app\decision_tree\Fitur;
 class Node 
 {
 	private $fitur;
-	private $index;
-	private $instance;
-	private $nextNode;
+	private $index = [];
+	private $instance = [];
+	private $indexNextNode = [];
 	private $label;
-	function __construct($fitur, $instance)
+	function __construct($fitur = null, $instance = [])
 	{
 		# code...
 		$this->fitur = $fitur;
@@ -25,17 +25,19 @@ class Node
 		$this->fitur = $fitur;
 	}
 
-	function getFitur()
+	function getFiturName()
 	{
-		return $this->fitur->getFitur();
+		return $this->fitur;
 	}
 
 	function setInstance($instance)
 	{
 		$this->instance = $instance;
 	}
-
-	function getInstance()
+	function getInstanceOne($index){
+		return $this->instance[$index]->getInstance();
+	}
+	function getInstanceAll()
 	{
 		return $this->instance;
 	}
@@ -48,8 +50,8 @@ class Node
 		return $this->index;
 	}
 
-	function setNextNode($index){
-		$this->nextNode = $index;
+	function setNextNode($indexInstance, $indexNextNode){
+		$this->indexNextNode[$indexInstance] = $indexNextNode;
 	}
 
 	function getNextNode(){

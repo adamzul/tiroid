@@ -7,7 +7,7 @@ use app\decision_tree\Node;
 /**
 * 
 */
-class PohonTree 
+class Tree 
 {
 	
 	private $nodes = [];
@@ -19,15 +19,23 @@ class PohonTree
 		
 	}
 
-	function makeNode($fitur, $instance){
+	function makeNode($fitur, $instance, $index){
 		$node = new Node($fitur, $instance);
-		$node->setIndex($this->index);
-		$this->index += 1;
+		$node->setIndex($index);
+		// $this->index += 1;
 		array_push($this->nodes, $node);
 	}
 
-	function getNode(){
+	function getNodeAll(){
 		return $this->nodes;
+	}
+	function getNodeOne($index){
+		foreach ($this->nodes as $node) {
+			# code...
+			if($node->getIndex() == $index){
+				return $node;
+			}
+		}
 	}
 
 	function getNodeFitur($index){
@@ -36,6 +44,10 @@ class PohonTree
 
 	function getNodeInstance($index){
 		return $this->node[$index]->getInstance();
+	}
+
+	function setIndexNode(){
+
 	}
 
 	function setNextNode(){

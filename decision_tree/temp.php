@@ -113,3 +113,12 @@ function getLabel(){
 		}
 		
 	}
+
+	function getJumData(){
+		$this->jumData = $this->dataset->getJumlahData();
+		return $this->jumData;
+	}
+	function getJumFitur(){
+		$this->jumFitur = $this->dataset->getJumlahFitur();
+		return $this->jumFitur;
+	}

@@ -23,7 +23,7 @@ class Entropy
 		$this->fitur = $fitur;
 	}
 
-	function getFitur(){
+	function getFiturName(){
 		return $this->fitur->getFitur();
 	}
 
@@ -33,6 +33,10 @@ class Entropy
 
 	function getEntropy(){
 		return $this->entropy;
+	}
+
+	function getFiturObjek(){
+		return $this->fitur;
 	}
 
 }

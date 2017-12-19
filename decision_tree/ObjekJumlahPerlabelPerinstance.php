@@ -3,7 +3,7 @@ namespace app\decision_tree;
 
 use Yii;
 
-class ObjekJumlahPerlabelPersubset{
+class ObjekJumlahPerlabelPerinstance{
 
 	private $label;
 	private $instance;
