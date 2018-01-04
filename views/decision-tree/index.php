@@ -1,12 +1,6 @@
 <?php
-/* @var $this yii\web\View */
-?> 
-<h1>decision-tree/index</h1>
+use yii\helpers\Html;
+?>
+<?= Html::a('learning',['decision-tree/learning'])?>
 
-<!-- <p>
-    You may change the content of this page by modifying
-    the file <code><?= __FILE__; ?></code>.
-</p> -->
-
-<?= var_dump($dataReturn) ?>
-
+<?= Html::a('validate',['decision-tree/validate'])?>

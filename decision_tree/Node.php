@@ -10,10 +10,13 @@ use app\decision_tree\Fitur;
 class Node 
 {
 	private $fitur;
-	private $index = [];
+	private $index;
 	private $instance = [];
-	private $indexNextNode = [];
-	private $label;
+	private $indexNextNode ;
+	private $label = [];
+	private $indexPrevNode;
+	private $instancePrevNode; 
+	
 	function __construct($fitur = null, $instance = [])
 	{
 		# code...
@@ -50,19 +53,34 @@ class Node
 		return $this->index;
 	}
 
-	function setNextNode($indexInstance, $indexNextNode){
+	function setIndexNextNode($indexInstance, $indexNextNode){
 		$this->indexNextNode[$indexInstance] = $indexNextNode;
 	}
 
-	function getNextNode(){
+	function getIndexNextNode(){
 		return $this->nextNode;
 	}
 
-	function setLabel($label){
-		$this->label = $label;
+	function setLabel($indexLabel, $label){
+		$this->label[$indexLabel] = $label;
 	}
 
-	function getLabel(){
+	function getLabelOne($indexLabel){
+		return $this->label[$indexLabel];
+	}
+	function getLabelAll(){
 		return $this->label;
+	}
+	function setIndexPrevNode($index){
+		$this->indexPrevNode = $index;
+	}
+	function getIndexPrevNode(){
+		return $this->indexPrevNode;
+	}
+	function setInstancePrevNode($instance){
+		$this->instancePrevNode = $instance;
+	}
+	function getInstancePrevNode(){
+		return $this->instancePrevNode;
 	}
 }

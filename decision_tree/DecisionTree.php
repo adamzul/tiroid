@@ -3,6 +3,7 @@ namespace app\decision_tree;
 
 use Yii; 
 use app\models\TabelDataset;
+use app\models\TabelRule;
 use app\decision_tree\ObjekJumlahPerlabelPerinstance;
 use app\decision_tree\Fitur;
 use app\decision_tree\Dataset;
@@ -172,7 +173,9 @@ class DecisionTree
 				}
 			}
 			if($temp != [])
-				array_push($this->dataset, new Dataset($temp));
+			{
+				array_push($this->dataset, new Dataset($temp, false, $node->getIndex(), $valueInstance));
+			}
 			
 		}
 	}
@@ -198,10 +201,11 @@ class DecisionTree
 		$this->getLabel();
 		$this->getFitur();
 		$this->tree = new Tree();
-
+		$berhenti = 0;
 		$doLoop = true;
 		while($doLoop)
 		{
+			$this->entropy = [];
 			$index = null;
 			for ($i=0; $i < count($this->dataset); $i++) {
 				# code...
@@ -212,10 +216,12 @@ class DecisionTree
 						$index = $i;
 						break;
 					}
+					else
+						$this->tree->getNodeOne($this->dataset[$i]->getIndexNode())->setLabel($this->dataset[$i]->getInstance(), $this->dataset[$i]->getLabel());
 					
 				}
 			}
-			if($index === null )
+			if($index === null)
 			{
 				break;
 			}
@@ -228,17 +234,44 @@ class DecisionTree
 			// $node = $this->makeTree();
 			// return $this->entropy;
 			$this->addNode($this->terkecil, $index);
+			$this->tree->getNodeOne($this->dataset[$index]->getIndexNode())->setIndexNextNode($this->dataset[$index]->getInstance(), $index);
+
+			$this->tree->getNodeOne($index)->setIndexPrevNode($this->dataset[$index]->getIndexNode());
+			$this->tree->getNodeOne($index)->setInstancePrevNode($this->dataset[$index]->getInstance());
+
 			// var_dump($this->tree->getNodeAll());
 			$this->bagiDataBerdasarFitur($this->tree->getNodeOne($index), $this->dataset[$index]);
 			$this->dataset[$index]->setProcessed(true);
-			// $doLoop = false;
+			$berhenti++;
+			// if($berhenti > 10)
+			// 	$doLoop = false;
 			
 		}
-		foreach ($this->dataset as $data) {
+		TabelRule::deleteAll();		
+		foreach ($this->tree->getNodeAll() as $node) {
+			foreach ($node->getLabelAll() as $key => $value) {
+				$model = new TabelRule();
+				$temp = $node->getFiturName();
+				$model->$temp = $key;
+				$model->label = $value;
+				$temp = $node; 
+				while($temp->getIndexPrevNode() !== null)
+				{
+					$temp3 = $temp;
+					$temp = $this->tree->getNodeOne($temp->getIndexPrevNode());
+					$temp2 = $temp->getFiturName();
+					$model->$temp2 = $temp3->getInstancePrevNode();
+					// echo $temp2;
+				}
+				$model->save(false);
+			}
+		}
+		foreach ($this->tree->getNodeAll() as $data) {
 			# code...
 			var_dump($data);
 			echo "<br><br>";
 		}
+		// var_dump($this->entropy);
 		
 		return $this->tree->getNodeAll();
 	}

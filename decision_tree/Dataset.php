@@ -13,8 +13,11 @@ class Dataset
 	private $jumlahData;
 	private $processed = false;
 	private $justHaveOneLabel = false;
+	private $indexNode;
+	private $instance;
+	private $label = null;
 
-	function __construct($dataset, $shift = false)
+	function __construct($dataset, $shift = false, $indexNode = null, $instance = null)
 	{
 		# code...
 		$this->dataset = $dataset;
@@ -26,6 +29,8 @@ class Dataset
 		}
 		
 		$this->setJumlahFitur();
+		$this->indexNode = $indexNode;
+		$this->instance = $instance;
 	}
 
 	private function setJumlahData(){
@@ -60,7 +65,7 @@ class Dataset
 	}
 
 	function findJustHaveOneLabel(){
-		$dataset = ($this->getDataset());
+		$dataset = $this->getDataset();
 		$label = end($dataset[0]);
 		// var_dump($label);
 		foreach ($this->getDataset() as $data) {
@@ -73,9 +78,25 @@ class Dataset
 			}
 		}
 		$this->justHaveOneLabel = true;
+		$this->label = $label;
 	}
 	function getJustHaveOneLabel(){
 		return $this->justHaveOneLabel;
+	}
+	function setIndexNode($index){
+		$this->indexNode = $index;
+	}
+	function getIndexNode(){
+		return $this->indexNode;
+	}
+	function setInstance($instance){
+		$this->instance = $instance;
+	}
+	function getInstance(){
+		return $this->instance;
+	}
+	function getLabel(){
+		return $this->label;
 	}
 	
 }
