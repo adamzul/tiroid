@@ -40,8 +40,6 @@ class TabelPegawai extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id_pegawai'], 'required'],
-            [['id_pegawai'], 'integer'],
             [['tanggal_lahir_pegawai'], 'safe'],
             [['nama_pegawai', 'username_pegawai'], 'string', 'max' => 30],
             [['jenis_kelamin_pegawai'], 'string', 'max' => 1],

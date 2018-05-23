@@ -33,8 +33,7 @@ class TabelHasilPemeriksaan extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id_hasil_pemeriksaan'], 'required'],
-            [['id_hasil_pemeriksaan', 'id_pasien', 'id_pegawai'], 'integer'],
+            [['id_pasien', 'id_pegawai'], 'integer'],
             [['hasil_pemeriksaan'], 'string'],
             [['tanggal_pemeriksaan'], 'safe'],
             [['foto'], 'string', 'max' => 50],

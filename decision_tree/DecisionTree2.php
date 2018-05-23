@@ -25,17 +25,9 @@ class DecisionTree
 	public $tree;
 
 
-	function getDataset($dataset){
-		if($dataset == null)
-			$this->dataset[0] = new Dataset(TabelDataset::find()->asArray()->all(),true) ;
-		// $tabel = new TabelDataset();
-		// $listFitur = $tabel->attributeLabels();
-		// array_pop($listFitur);
-		// array_shift($listFitur);
-		// $this->dataset[0]->setNameFitur($listFitur) ; 
-		else
-			$this->dataset[0] = new Dataset($dataset, true) ;
+	function getDataset(){
 
+		$this->dataset[0] = new Dataset(TabelDataset::find()->asArray()->all(),true) ;
 		return $this->dataset[0];
 	}
 	function getJumData($index){
@@ -169,9 +161,6 @@ class DecisionTree
 		return $terkecil;
 	}
 	function bagiDataBerdasarFitur($node, $dataset){
-			// echo "<br><br><br>ganti loop<br>";
-			// var_dump($node);
-			// echo "<br><br>";
 		foreach ($node->getInstanceAll() as $valueInstance) {
 			# code...
 			$temp = [];
@@ -185,18 +174,10 @@ class DecisionTree
 			}
 			if($temp != [])
 			{
-				$temp2 = new Dataset($temp, false, $node->getIndex(), $valueInstance);
-				$listFitur = $dataset->getNameFitur();
-				array_push($listFitur, $fiturName);
-				$temp2->setNameFitur($listFitur);
-				array_push($this->dataset, $temp2);
-				// var_dump(end($this->dataset));
-				// echo "<br><br><br>";
-
+				array_push($this->dataset, new Dataset($temp, false, $node->getIndex(), $valueInstance));
 			}
-
+			
 		}
-
 	}
 	function makeTree(){
 		$tree = new Tree();
@@ -213,52 +194,43 @@ class DecisionTree
 	}
 
 
-	function main($dataset = null){
+	function main(){
 		// inisialisasi
-		$this->getDataset($dataset);
+		$this->getDataset();
 		$this->getJumFitur(0);
 		$this->getLabel();
 		$this->getFitur();
 		$this->tree = new Tree();
 		$berhenti = 0;
 		$doLoop = true;
-		// var_dump($this->dataset[0]);
 		while($doLoop)
-		{	
+		{
 			$this->entropy = [];
 			$index = null;
 			for ($i=0; $i < count($this->dataset); $i++) {
 				# code...
 				if($this->dataset[$i]->getProcessed() == false){
 					$this->dataset[$i]->findJustHaveOneLabel();
-					if(!$this->dataset[$i]->getJustHaveOneLabel() && !$this->dataset[$i]->getAllDataSame())
+					if(!$this->dataset[$i]->getJustHaveOneLabel())
 					{
 						$index = $i;
 						break;
-					}
-					elseif($this->dataset[$i]->getAllDataSame() && !$this->dataset[$i]->getJustHaveOneLabel()){
-						$this->tree->getNodeOne($this->dataset[$i]->getIndexNode())->setLabel($this->dataset[$i]->getInstance(), $this->dataset[$i]->getMostLabel());
 					}
 					else
 						$this->tree->getNodeOne($this->dataset[$i]->getIndexNode())->setLabel($this->dataset[$i]->getInstance(), $this->dataset[$i]->getLabel());
 					
 				}
-				
 			}
-			
 			if($index === null)
 			{
 				break;
 			}
 			for ($i=0; $i < $this->jumFitur; $i++) { 
-
-				if(!in_array($this->fitur[$i]->getFitur(), $this->dataset[$index]->getNameFitur()))
+				# code...
 				array_push($this->entropy, new Entropy($this->fitur[$i], $this->getEntropy($this->dataset[$index], $this->fitur[$i]))); 
 				// $this->entropy[$this->fitur[$i]->getFitur()] = $this->getEntropy($this->dataset, $this->fitur[$i]);
 			}
 			$this->terkecil = $this->getTerkecilDariArray($this->entropy);
-			// var_dump($this->entropy);
-			// echo "<br><br><br>";
 			// $node = $this->makeTree();
 			// return $this->entropy;
 			$this->addNode($this->terkecil, $index);
@@ -273,8 +245,6 @@ class DecisionTree
 			$berhenti++;
 			// if($berhenti > 10)
 			// 	$doLoop = false;
-
-
 			
 		}
 		TabelRule::deleteAll();		
@@ -296,13 +266,13 @@ class DecisionTree
 				$model->save(false);
 			}
 		}
-		// foreach ($this->tree->getNodeAll() as $data) {
-		// 	# code...
-		// 	var_dump($data);
-		// 	echo "<br><br>";
-		// }
+		foreach ($this->tree->getNodeAll() as $data) {
+			# code...
+			var_dump($data);
+			echo "<br><br>";
+		}
 		// var_dump($this->entropy);
-		// var_dump($this->dataset[0]);
+		
 		return $this->tree->getNodeAll();
 	}
 }

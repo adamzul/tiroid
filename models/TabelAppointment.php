@@ -32,8 +32,7 @@ class TabelAppointment extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id_appointment'], 'required'],
-            [['id_appointment', 'id_pasien', 'id_pegawai'], 'integer'],
+            [['id_pasien', 'id_pegawai'], 'integer'],
             [['tanggal_mengajukan_appointment', 'tanggal_appointment'], 'safe'],
             [['id_pegawai'], 'exist', 'skipOnError' => true, 'targetClass' => TabelPegawai::className(), 'targetAttribute' => ['id_pegawai' => 'id_pegawai']],
             [['id_pasien'], 'exist', 'skipOnError' => true, 'targetClass' => TabelPasien::className(), 'targetAttribute' => ['id_pasien' => 'id_pasien']],

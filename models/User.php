@@ -1,31 +1,24 @@
 <?php
 
 namespace app\models;
+use app\models\TabelPegawai;
 
 class User extends \yii\base\Object implements \yii\web\IdentityInterface
 {
-    public $id;
-    public $username;
+    public $id_pegawai;
+    public $role_pegawai;
+    public $nama_pegawai;
     public $password;
+    public $jenis_kelamin_pegawai;
+    public $tanggal_lahir_pegawai;
+    public $alamat_pegawai;
+    public $no_telpon_pegawai;
+    public $username_pegawai;
+    public $password_pegawai;
     public $authKey;
     public $accessToken;
 
-    private static $users = [
-        '100' => [
-            'id' => '100',
-            'username' => 'admin',
-            'password' => 'admin',
-            'authKey' => 'test100key',
-            'accessToken' => '100-token',
-        ],
-        '101' => [
-            'id' => '101',
-            'username' => 'demo',
-            'password' => 'demo',
-            'authKey' => 'test101key',
-            'accessToken' => '101-token',
-        ],
-    ];
+    
 
 
     /**
@@ -33,7 +26,11 @@ class User extends \yii\base\Object implements \yii\web\IdentityInterface
      */
     public static function findIdentity($id)
     {
-        return isset(self::$users[$id]) ? new static(self::$users[$id]) : null;
+        $user = TabelPegawai::findOne($id);
+        if(count($user)){
+            return new static($user);
+        }
+        return null;
     }
 
     /**
@@ -41,12 +38,10 @@ class User extends \yii\base\Object implements \yii\web\IdentityInterface
      */
     public static function findIdentityByAccessToken($token, $type = null)
     {
-        foreach (self::$users as $user) {
-            if ($user['accessToken'] === $token) {
-                return new static($user);
-            }
+        $user = TabelPegawai::find()->where(['accessToken'=>$token])->one(); 
+        if(count($user)){
+            return new static($user);
         }
-
         return null;
     }
 
@@ -58,12 +53,10 @@ class User extends \yii\base\Object implements \yii\web\IdentityInterface
      */
     public static function findByUsername($username)
     {
-        foreach (self::$users as $user) {
-            if (strcasecmp($user['username'], $username) === 0) {
-                return new static($user);
-            }
+        $user = TabelPegawai::find()->where(['username_pegawai'=>$username])->one(); 
+        if(count($user)){
+            return new static($user);
         }
-
         return null;
     }
 
@@ -72,7 +65,7 @@ class User extends \yii\base\Object implements \yii\web\IdentityInterface
      */
     public function getId()
     {
-        return $this->id;
+        return $this->id_pegawai;
     }
 
     /**
@@ -99,6 +92,6 @@ class User extends \yii\base\Object implements \yii\web\IdentityInterface
      */
     public function validatePassword($password)
     {
-        return $this->password === $password;
+        return $this->password_pegawai === md5($password);
     }
 }

@@ -3,7 +3,7 @@
 use yii\helpers\Html;
 
 /* @var $this yii\web\View */
-/* @var $model app\models\TabelArtikel */
+/* @var $model app\Models\TabelArtikel */
 
 $this->title = 'Update Tabel Artikel: ' . $model->id_artikel;
 $this->params['breadcrumbs'][] = ['label' => 'Tabel Artikels', 'url' => ['index']];

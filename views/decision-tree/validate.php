@@ -17,6 +17,11 @@ use yii\widgets\ActiveForm;
     <?= $form->field($model, 'fitur2')->textInput() ?>
 
     <?= $form->field($model, 'fitur3')->textInput() ?>
+    <?= $form->field($model, 'fitur4')->textInput() ?>
+    <?= $form->field($model, 'fitur5')->textInput() ?>
+    <?= $form->field($model, 'fitur6')->textInput() ?>
+    <?= $form->field($model, 'fitur7')->textInput() ?>
+
 
     <div class="form-group">
         <?= Html::submitButton('validate', ['class' => 'btn btn-primary']) ?>

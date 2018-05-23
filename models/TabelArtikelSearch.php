@@ -5,10 +5,10 @@ namespace app\models;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\TabelArtikel;
+use app\Models\TabelArtikel;
 
 /**
- * TabelArtikelSearch represents the model behind the search form about `app\models\TabelArtikel`.
+ * TabelArtikelSearch represents the model behind the search form about `app\Models\TabelArtikel`.
  */
 class TabelArtikelSearch extends TabelArtikel
 {
@@ -19,7 +19,7 @@ class TabelArtikelSearch extends TabelArtikel
     {
         return [
             [['id_artikel', 'id_pegawai'], 'integer'],
-            [['konten_artikel', 'tanggal_artikel', 'sumber_artikel'], 'safe'],
+            [['judul_artikel', 'konten_artikel', 'tanggal_artikel', 'sumber_artikel'], 'safe'],
         ];
     }
 
@@ -64,7 +64,8 @@ class TabelArtikelSearch extends TabelArtikel
             'tanggal_artikel' => $this->tanggal_artikel,
         ]);
 
-        $query->andFilterWhere(['like', 'konten_artikel', $this->konten_artikel])
+        $query->andFilterWhere(['like', 'judul_artikel', $this->judul_artikel])
+            ->andFilterWhere(['like', 'konten_artikel', $this->konten_artikel])
             ->andFilterWhere(['like', 'sumber_artikel', $this->sumber_artikel]);
 
         return $dataProvider;

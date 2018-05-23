@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
-/* @var $model app\models\TabelArtikel */
+/* @var $model app\Models\TabelArtikel */
 
 $this->title = $model->id_artikel;
 $this->params['breadcrumbs'][] = ['label' => 'Tabel Artikels', 'url' => ['index']];
@@ -30,6 +30,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'attributes' => [
             'id_artikel',
             'id_pegawai',
+            'judul_artikel',
             'konten_artikel:ntext',
             'tanggal_artikel',
             'sumber_artikel',

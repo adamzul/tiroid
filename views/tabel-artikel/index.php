@@ -25,7 +25,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\SerialColumn'],
 
             'id_artikel',
-            'id_pegawai',
+            'judul_artikel',
             'konten_artikel:ntext',
             'tanggal_artikel',
             'sumber_artikel',

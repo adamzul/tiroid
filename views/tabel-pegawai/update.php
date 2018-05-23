@@ -3,7 +3,7 @@
 use yii\helpers\Html;
 
 /* @var $this yii\web\View */
-/* @var $model app\models\TabelPegawai */
+/* @var $model app\Models\TabelPegawai */
 
 $this->title = 'Update Tabel Pegawai: ' . $model->id_pegawai;
 $this->params['breadcrumbs'][] = ['label' => 'Tabel Pegawais', 'url' => ['index']];

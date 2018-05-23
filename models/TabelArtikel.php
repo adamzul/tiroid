@@ -9,6 +9,7 @@ use Yii;
  *
  * @property integer $id_artikel
  * @property integer $id_pegawai
+ * @property string $judul_artikel
  * @property string $konten_artikel
  * @property string $tanggal_artikel
  * @property string $sumber_artikel
@@ -31,10 +32,11 @@ class TabelArtikel extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id_artikel'], 'required'],
-            [['id_artikel', 'id_pegawai'], 'integer'],
+            [['id_pegawai'], 'integer'],
+            [['judul_artikel'], 'required'],
             [['konten_artikel'], 'string'],
             [['tanggal_artikel'], 'safe'],
+            [['judul_artikel'], 'string', 'max' => 50],
             [['sumber_artikel'], 'string', 'max' => 30],
             [['id_pegawai'], 'exist', 'skipOnError' => true, 'targetClass' => TabelPegawai::className(), 'targetAttribute' => ['id_pegawai' => 'id_pegawai']],
         ];
@@ -48,6 +50,7 @@ class TabelArtikel extends \yii\db\ActiveRecord
         return [
             'id_artikel' => 'Id Artikel',
             'id_pegawai' => 'Id Pegawai',
+            'judul_artikel' => 'Judul Artikel',
             'konten_artikel' => 'Konten Artikel',
             'tanggal_artikel' => 'Tanggal Artikel',
             'sumber_artikel' => 'Sumber Artikel',

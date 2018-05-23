@@ -3,7 +3,7 @@
 namespace app\controllers;
 
 use Yii;
-use app\models\TabelPegawai;
+use app\Models\TabelPegawai;
 use app\models\TabelPegawaiSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;

@@ -4,7 +4,7 @@ use yii\helpers\Html;
 
 
 /* @var $this yii\web\View */
-/* @var $model app\models\TabelArtikel */
+/* @var $model app\Models\TabelArtikel */
 
 $this->title = 'Create Tabel Artikel';
 $this->params['breadcrumbs'][] = ['label' => 'Tabel Artikels', 'url' => ['index']];

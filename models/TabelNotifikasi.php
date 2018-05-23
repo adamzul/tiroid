@@ -30,8 +30,7 @@ class TabelNotifikasi extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id_notifikasi'], 'required'],
-            [['id_notifikasi', 'id_pegawai'], 'integer'],
+            [['id_pegawai'], 'integer'],
             [['konten_notifikasi'], 'string'],
             [['tanggal_notifikasi'], 'safe'],
             [['id_pegawai'], 'exist', 'skipOnError' => true, 'targetClass' => TabelPegawai::className(), 'targetAttribute' => ['id_pegawai' => 'id_pegawai']],

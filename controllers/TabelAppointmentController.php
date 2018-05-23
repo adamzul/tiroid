@@ -3,7 +3,7 @@
 namespace app\controllers;
 
 use Yii;
-use app\models\TabelAppointment;
+use app\Models\TabelAppointment;
 use app\models\TabelAppointmentSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;

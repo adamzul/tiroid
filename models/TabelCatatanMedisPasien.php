@@ -33,8 +33,7 @@ class TabelCatatanMedisPasien extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id_catatan_medis_pasien'], 'required'],
-            [['id_catatan_medis_pasien', 'id_penyakit', 'id_pasien', 'id_pegawai'], 'integer'],
+            [['id_penyakit', 'id_pasien', 'id_pegawai'], 'integer'],
             [['catatan'], 'string'],
             [['id_pegawai'], 'exist', 'skipOnError' => true, 'targetClass' => TabelPegawai::className(), 'targetAttribute' => ['id_pegawai' => 'id_pegawai']],
             [['id_pasien'], 'exist', 'skipOnError' => true, 'targetClass' => TabelPasien::className(), 'targetAttribute' => ['id_pasien' => 'id_pasien']],

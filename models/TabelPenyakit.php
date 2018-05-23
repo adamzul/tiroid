@@ -29,8 +29,6 @@ class TabelPenyakit extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id_penyakit'], 'required'],
-            [['id_penyakit'], 'integer'],
             [['deskripsi_penyakit'], 'string'],
             [['nama_penyakit'], 'string', 'max' => 30],
         ];

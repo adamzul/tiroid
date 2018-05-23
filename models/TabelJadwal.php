@@ -32,8 +32,7 @@ class TabelJadwal extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id_jadwal_dokter'], 'required'],
-            [['id_jadwal_dokter', 'id_pegawai'], 'integer'],
+            [['id_pegawai'], 'integer'],
             [['jam_mulai_jadwal', 'jam_berakhir_jadwal'], 'safe'],
             [['hari_jadwal'], 'string', 'max' => 10],
             [['ruang'], 'string', 'max' => 20],

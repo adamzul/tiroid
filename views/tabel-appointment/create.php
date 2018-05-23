@@ -4,7 +4,7 @@ use yii\helpers\Html;
 
 
 /* @var $this yii\web\View */
-/* @var $model app\models\TabelAppointment */
+/* @var $model app\Models\TabelAppointment */
 
 $this->title = 'Create Tabel Appointment';
 $this->params['breadcrumbs'][] = ['label' => 'Tabel Appointments', 'url' => ['index']];

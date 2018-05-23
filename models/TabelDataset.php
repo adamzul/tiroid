@@ -13,6 +13,8 @@ use Yii;
  * @property string $fitur3
  * @property string $fitur4
  * @property string $fitur5
+ * @property string $fitur6
+ * @property string $fitur7
  * @property string $label
  */
 class TabelDataset extends \yii\db\ActiveRecord
@@ -31,8 +33,7 @@ class TabelDataset extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['fitur1', 'fitur2', 'fitur3', 'label'], 'required'],
-            [['fitur1', 'fitur2', 'fitur3', 'label'], 'string', 'max' => 20],
+            [['fitur1', 'fitur2', 'fitur3', 'fitur4', 'fitur5', 'fitur6', 'fitur7', 'label'], 'string', 'max' => 20],
         ];
     }
 
@@ -46,6 +47,10 @@ class TabelDataset extends \yii\db\ActiveRecord
             'fitur1' => 'Fitur1',
             'fitur2' => 'Fitur2',
             'fitur3' => 'Fitur3',
+            'fitur4' => 'Fitur4',
+            'fitur5' => 'Fitur5',
+            'fitur6' => 'Fitur6',
+            'fitur7' => 'Fitur7',
             'label' => 'Label',
         ];
     }

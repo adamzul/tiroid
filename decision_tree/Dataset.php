@@ -16,6 +16,9 @@ class Dataset
 	private $indexNode;
 	private $instance;
 	private $label = null;
+	private $allDataSame;
+	private $nameFitur = [];
+	private $mostLabel;
 
 	function __construct($dataset, $shift = false, $indexNode = null, $instance = null)
 	{
@@ -97,6 +100,35 @@ class Dataset
 	}
 	function getLabel(){
 		return $this->label;
+	}
+	function getAllDataSame(){
+		for ($i=0; $i < count($this->dataset) - 1; $i++) { 
+			foreach ($this->dataset[0] as $key => $value) {
+				if($key == "label")
+					break;
+				if($this->dataset[$i][$key] != $this->dataset[$i+1][$key])
+				{
+					// $this->allDataSame = false;
+					return false;
+				}
+			}return true;
+			// $this->allDataSame = true;
+		}
+	}
+	function setNameFitur($fitur){
+		$this->nameFitur = $fitur;
+	}
+	function getNameFitur(){
+		return $this->nameFitur;
+	}
+	function getMostLabel(){
+		$label = [];
+		foreach ($this->dataset as $value) {
+			array_push($label, $value["label"]);
+		}
+		$c = array_count_values($label); 
+		$val = array_search(max($c), $c);
+		return $val;
 	}
 	
 }

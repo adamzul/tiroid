@@ -5,10 +5,10 @@ namespace app\models;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\TabelPegawai;
+use app\Models\TabelPegawai;
 
 /**
- * TabelPegawaiSearch represents the model behind the search form about `app\models\TabelPegawai`.
+ * TabelPegawaiSearch represents the model behind the search form about `app\Models\TabelPegawai`.
  */
 class TabelPegawaiSearch extends TabelPegawai
 {

@@ -4,15 +4,13 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
-/* @var $model app\models\TabelAppointment */
+/* @var $model app\Models\TabelAppointment */
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
 <div class="tabel-appointment-form">
 
     <?php $form = ActiveForm::begin(); ?>
-
-    <?= $form->field($model, 'id_appointment')->textInput() ?>
 
     <?= $form->field($model, 'id_pasien')->textInput() ?>
 

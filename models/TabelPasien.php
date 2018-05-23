@@ -37,8 +37,6 @@ class TabelPasien extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id_pasien'], 'required'],
-            [['id_pasien'], 'integer'],
             [['tanggal_lahir'], 'safe'],
             [['nama_pasien', 'username_pasien'], 'string', 'max' => 30],
             [['jenis_kelamin_pasien'], 'string', 'max' => 1],

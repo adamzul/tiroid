@@ -3,17 +3,21 @@
 namespace app\controllers;
 
 use Yii;
-use app\models\TabelArtikel;
+use app\Models\TabelArtikel;
 use app\models\TabelArtikelSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
+use app\connection_firebase\ConnectionFirebase;
+use app\decision_tree\DecisionTree;
 /**
  * TabelArtikelController implements the CRUD actions for TabelArtikel model.
  */
 class TabelArtikelController extends Controller
 {
+
+    public $connection;
     /**
      * @inheritdoc
      */
@@ -27,6 +31,11 @@ class TabelArtikelController extends Controller
                 ],
             ],
         ];
+    }
+
+    public function beforeAction($event){
+        $this->connection = (new ConnectionFirebase('article'))->reference;
+        return parent::beforeAction($event);
     }
 
     /**
@@ -64,9 +73,26 @@ class TabelArtikelController extends Controller
     public function actionCreate()
     {
         $model = new TabelArtikel();
-
+        $model->id_pegawai = Yii::$app->user->identity->id_pegawai;
+        
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            $transaction = Yii::$app->db->beginTransaction();
+            try {
+                
+                $newPost = $this->connection->getChild($model->id_artikel)
+                ->set(["contentTitle" => $model->judul_artikel, "content" => $model->konten_artikel]);
+                $transaction->commit();  
+            }
+            catch(Exception $e){
+                $transaction->rollback();
+                return $this->render('create', [
+                'model' => $model,
+            ]);
+        
+            }
+            
             return $this->redirect(['view', 'id' => $model->id_artikel]);
+
         } else {
             return $this->render('create', [
                 'model' => $model,
@@ -83,8 +109,21 @@ class TabelArtikelController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        $post = $this->connection->getChild($id)->getValue();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            try {
+                
+                $newPost = $this->connection->getChild($model->id_artikel)
+                ->set(["contentTitle" => $model->judul_artikel, "content" => $model->konten_artikel]);  
+            }
+            catch(Exception $e){
+                $transaction->rollback();
+                return $this->render('create', [
+                'model' => $model,
+            ]);
+        
+            }
             return $this->redirect(['view', 'id' => $model->id_artikel]);
         } else {
             return $this->render('update', [
@@ -102,6 +141,7 @@ class TabelArtikelController extends Controller
     public function actionDelete($id)
     {
         $this->findModel($id)->delete();
+        $this->connection->getChild($id)->remove();
 
         return $this->redirect(['index']);
     }

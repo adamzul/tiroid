@@ -4,7 +4,7 @@ use yii\helpers\Html;
 
 
 /* @var $this yii\web\View */
-/* @var $model app\models\TabelPegawai */
+/* @var $model app\Models\TabelPegawai */
 
 $this->title = 'Create Tabel Pegawai';
 $this->params['breadcrumbs'][] = ['label' => 'Tabel Pegawais', 'url' => ['index']];
