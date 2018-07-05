@@ -3,19 +3,25 @@
 namespace app\controllers;
 
 use Yii;
-use app\models\TabelJadwalPemeriksaan;
-use app\models\TabelJadwalPemeriksaanSearch;
+use app\Models\TabelJadwalPemeriksaan;
+use app\Models\TabelJadwalPemeriksaanSearch;
+use app\Models\TabelPasien;
+use app\Models\TabelJenisPemeriksaan;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\filters\AccessControl;
+use app\connection_firebase\ConnectionFirebase;
+
 
 /**
  * TabelJadwalPemeriksaanController implements the CRUD actions for TabelJadwalPemeriksaan model.
  */
 class TabelJadwalPemeriksaanController extends Controller
 {
+    public $connection;
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function behaviors()
     {
@@ -26,7 +32,16 @@ class TabelJadwalPemeriksaanController extends Controller
                     'delete' => ['POST'],
                 ],
             ],
+            'access' => [
+                'class' => AccessControl::className(),
+                'rules' => [['actions' => ['index', 'create', 'update', 'delete', 'view',],'allow' => true,'roles' => ['@']],
+                    ]
+            ],
         ];
+    }
+    public function beforeAction($event){
+        $this->connection = (new ConnectionFirebase('schedule'))->reference;
+        return parent::beforeAction($event);
     }
 
     /**
@@ -48,6 +63,7 @@ class TabelJadwalPemeriksaanController extends Controller
      * Displays a single TabelJadwalPemeriksaan model.
      * @param integer $id
      * @return mixed
+     * @throws NotFoundHttpException if the model cannot be found
      */
     public function actionView($id)
     {
@@ -66,12 +82,13 @@ class TabelJadwalPemeriksaanController extends Controller
         $model = new TabelJadwalPemeriksaan();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            $this->saveToFirebase($model);
             return $this->redirect(['view', 'id' => $model->id_jadwal_pemeriksaan]);
-        } else {
-            return $this->render('create', [
-                'model' => $model,
-            ]);
         }
+
+        return $this->render('create', [
+            'model' => $model,
+        ]);
     }
 
     /**
@@ -79,18 +96,21 @@ class TabelJadwalPemeriksaanController extends Controller
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
+     * @throws NotFoundHttpException if the model cannot be found
      */
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            $this->saveToFirebase($model);
             return $this->redirect(['view', 'id' => $model->id_jadwal_pemeriksaan]);
-        } else {
-            return $this->render('update', [
-                'model' => $model,
-            ]);
         }
+
+        return $this->render('update', [
+            'model' => $model,
+        ]);
     }
 
     /**
@@ -98,10 +118,16 @@ class TabelJadwalPemeriksaanController extends Controller
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
+     * @throws NotFoundHttpException if the model cannot be found
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $model = $this->findModel($id);
+        $jenisPemeriksaan = TabelJenisPemeriksaan::findOne($model->id_jenis_pemeriksaan);
+        $pasien = TabelPasien::findOne($model->id_pasien);
+        $newPost = $this->connection->getChild($pasien->id_firebase.'/'.$model->id_jadwal_pemeriksaan)
+            ->remove();
+        $model->delete();
 
         return $this->redirect(['index']);
     }
@@ -117,8 +143,14 @@ class TabelJadwalPemeriksaanController extends Controller
     {
         if (($model = TabelJadwalPemeriksaan::findOne($id)) !== null) {
             return $model;
-        } else {
-            throw new NotFoundHttpException('The requested page does not exist.');
         }
+
+        throw new NotFoundHttpException('The requested page does not exist.');
+    }
+    private function saveToFirebase($model){
+        $jenisPemeriksaan = TabelJenisPemeriksaan::findOne($model->id_jenis_pemeriksaan);
+        $pasien = TabelPasien::findOne($model->id_pasien);
+        $newPost = $this->connection->getChild($pasien->id_firebase.'/'.$model->id_jadwal_pemeriksaan)
+            ->set(["contentTitle" => $jenisPemeriksaan->jenis_pemeriksaan,  "date" => $model->jadwal_pemeriksaan]); 
     }
 }

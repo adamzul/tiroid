@@ -5,15 +5,21 @@ namespace app\controllers;
 use Yii;
 use app\models\TabelJadwal;
 use app\models\TabelJadwalSearch;
+use app\models\TabelPegawai;
+use app\models\TabelHari;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\filters\AccessControl;
+
+use app\connection_firebase\ConnectionFirebase;
 
 /**
  * TabelJadwalController implements the CRUD actions for TabelJadwal model.
  */
 class TabelJadwalController extends Controller
 {
+    public $connection;
     /**
      * @inheritdoc
      */
@@ -26,7 +32,16 @@ class TabelJadwalController extends Controller
                     'delete' => ['POST'],
                 ],
             ],
+            'access' => [
+                'class' => AccessControl::className(),
+                'rules' => [['actions' => ['index', 'create', 'update', 'delete', 'view',],'allow' => true,'roles' => ['@']],
+                ]
+            ],
         ];
+    }
+    public function beforeAction($event){
+        $this->connection = (new ConnectionFirebase('doctorSchedule'))->reference;
+        return parent::beforeAction($event);
     }
 
     /**
@@ -66,6 +81,7 @@ class TabelJadwalController extends Controller
         $model = new TabelJadwal();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+             $this->saveToFirebase($model);
             return $this->redirect(['view', 'id' => $model->id_jadwal_dokter]);
         } else {
             return $this->render('create', [
@@ -85,6 +101,7 @@ class TabelJadwalController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            $this->saveToFirebase($model);
             return $this->redirect(['view', 'id' => $model->id_jadwal_dokter]);
         } else {
             return $this->render('update', [
@@ -101,7 +118,9 @@ class TabelJadwalController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $model = $this->findModel($id);
+        $newPost = $this->connection->getChild($model->id_pegawai.'/'.$model->id_jadwal_dokter)->remove();
+        $model->delete();
 
         return $this->redirect(['index']);
     }
@@ -120,5 +139,12 @@ class TabelJadwalController extends Controller
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
+    }
+
+    private function saveToFirebase($model){
+        $dokter = TabelPegawai::find()->where(['id_pegawai' => $model->id_pegawai])->one();
+        $hari = TabelHari::find()->where(['id_hari' => $model->id_hari_jadwal])->one();
+        $newPost = $this->connection->getChild($model->id_pegawai.'/'.$model->id_jadwal_dokter)
+        ->set(["doctorName" => $dokter->nama_pegawai, "day" => $hari->hari, "code" => $hari->code, 'timeStart' => $model->jam_mulai_jadwal, 'timeStop' => $model->jam_berakhir_jadwal]);
     }
 }

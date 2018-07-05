@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
-/* @var $model app\models\TabelPasienSearch */
+/* @var $model app\Models\TabelPasienSearch */
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
@@ -19,13 +19,13 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'nama_pasien') ?>
 
-    <?= $form->field($model, 'jenis_kelamin_pasien') ?>
+    <?= $form->field($model, 'id_jenis_kelamin_pasien') ?>
 
     <?= $form->field($model, 'tanggal_lahir') ?>
 
     <?= $form->field($model, 'alamat') ?>
 
-    <?php // echo $form->field($model, 'username_pasien') ?>
+    <?php // echo $form->field($model, 'email_pasien') ?>
 
     <?php // echo $form->field($model, 'password_pasien') ?>
 

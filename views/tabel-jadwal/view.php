@@ -30,7 +30,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'attributes' => [
             'id_jadwal_dokter',
             'id_pegawai',
-            'hari_jadwal',
+            'id_hari_jadwal',
             'jam_mulai_jadwal',
             'jam_berakhir_jadwal',
             'ruang',

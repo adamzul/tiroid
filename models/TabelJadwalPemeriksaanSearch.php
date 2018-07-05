@@ -1,30 +1,31 @@
 <?php
 
-namespace app\models;
+namespace app\Models;
 
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\TabelJadwalPemeriksaan;
+use app\Models\TabelJadwalPemeriksaan;
 
 /**
- * TabelJadwalPemeriksaanSearch represents the model behind the search form about `app\models\TabelJadwalPemeriksaan`.
+ * TabelJadwalPemeriksaanSearch represents the model behind the search form of `app\Models\TabelJadwalPemeriksaan`.
  */
 class TabelJadwalPemeriksaanSearch extends TabelJadwalPemeriksaan
 {
+    public $pasien, $jenis_pemeriksaan;
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function rules()
     {
         return [
-            [['id_jadwal_pemeriksaan', 'id_pasien', 'id_pegawai'], 'integer'],
-            [['jadwal_pemeriksaan'], 'safe'],
+            [['id_jadwal_pemeriksaan', 'id_pasien', 'id_pegawai', 'id_jenis_pemeriksaan'], 'integer'],
+            [['jadwal_pemeriksaan', 'pasien', 'jenis_pemeriksaan'], 'safe'],
         ];
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function scenarios()
     {
@@ -42,12 +43,22 @@ class TabelJadwalPemeriksaanSearch extends TabelJadwalPemeriksaan
     public function search($params)
     {
         $query = TabelJadwalPemeriksaan::find();
+        $query->joinWith(['tabelPasien', 'tabelJenisPemeriksaan']);
 
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
+
+        $dataProvider->sort->attributes['jenis_pemeriksaan'] = [
+            'asc' => ['tabel_jenis_pemeriksaan.jenis_pemeriksaan' => SORT_ASC],
+            'desc' => ['tabel_jenis_pemeriksaan.jenis_pemeriksaan' => SORT_DESC]
+        ];
+        $dataProvider->sort->attributes['pasien'] = [
+            'asc' => ['tabel_pasien.nama_pasien' => SORT_ASC],
+            'desc' => ['tabel_pasien.nama_pasien' => SORT_DESC]
+        ];
 
         $this->load($params);
 
@@ -62,8 +73,11 @@ class TabelJadwalPemeriksaanSearch extends TabelJadwalPemeriksaan
             'id_jadwal_pemeriksaan' => $this->id_jadwal_pemeriksaan,
             'id_pasien' => $this->id_pasien,
             'id_pegawai' => $this->id_pegawai,
+            'id_jenis_pemeriksaan' => $this->id_jenis_pemeriksaan,
             'jadwal_pemeriksaan' => $this->jadwal_pemeriksaan,
         ]);
+        $query->andFilterWhere(['like', 'tabel_jenis_pemeriksaan.jenis_pemeriksaan', $this->jenis_pemeriksaan])
+            ->andFilterWhere(['like', 'tabel_pasien.nama_pasien', $this->jenis_pemeriksaan]);
 
         return $dataProvider;
     }

@@ -6,15 +6,16 @@ use Kreait\Firebase\ServiceAccount;
 
 class ConnectionFirebase
 {
-	public $serviceAccount;
-    public $firebase;
-    public $database;
-    public $reference;
+	public $serviceAccount, $firebase, $database, $reference, $storageRef, $auth;
+
 	function __construct($argument = null)
 	{
 		$this->serviceAccount = ServiceAccount::fromJsonFile(__DIR__.'/../testing-1b24f-firebase-adminsdk-ggn4f-6c7b865bb0.json');
     	$this->firebase = (new Factory)->withServiceAccount($this->serviceAccount)->create();
     	$this->database = $this->firebase->getDatabase();
+    	$this->storageRef = $this->firebase->getStorage();
+    	$this->auth = $this->firebase->getAuth();
+    	// var_dump($this->firebase);
 		if($argument != null){
 			$this->reference = $this->database->getReference($argument);
 		}

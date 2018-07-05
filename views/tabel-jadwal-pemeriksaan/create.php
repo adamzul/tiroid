@@ -4,7 +4,7 @@ use yii\helpers\Html;
 
 
 /* @var $this yii\web\View */
-/* @var $model app\models\TabelJadwalPemeriksaan */
+/* @var $model app\Models\TabelJadwalPemeriksaan */
 
 $this->title = 'Create Tabel Jadwal Pemeriksaan';
 $this->params['breadcrumbs'][] = ['label' => 'Tabel Jadwal Pemeriksaans', 'url' => ['index']];

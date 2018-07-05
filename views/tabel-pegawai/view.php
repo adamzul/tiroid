@@ -30,7 +30,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'attributes' => [
             'id_pegawai',
             'nama_pegawai',
-            'jenis_kelamin_pegawai',
+            'id_jenis_kelamin_pegawai',
             'tanggal_lahir_pegawai',
             'alamat_pegawai',
             'no_telpon_pegawai',

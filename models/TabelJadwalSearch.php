@@ -12,6 +12,7 @@ use app\models\TabelJadwal;
  */
 class TabelJadwalSearch extends TabelJadwal
 {
+    public $dokter, $hari;
     /**
      * @inheritdoc
      */
@@ -19,7 +20,7 @@ class TabelJadwalSearch extends TabelJadwal
     {
         return [
             [['id_jadwal_dokter', 'id_pegawai'], 'integer'],
-            [['hari_jadwal', 'jam_mulai_jadwal', 'jam_berakhir_jadwal', 'ruang'], 'safe'],
+            [['id_hari_jadwal', 'jam_mulai_jadwal', 'jam_berakhir_jadwal', 'ruang', 'dokter', 'hari'], 'safe'],
         ];
     }
 
@@ -42,12 +43,23 @@ class TabelJadwalSearch extends TabelJadwal
     public function search($params)
     {
         $query = TabelJadwal::find();
+        $query->joinWith(['tabelPegawai', 'tabelHari']);
 
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
+
+        $dataProvider->sort->attributes['dokter'] = [
+            'asc' => ['tabel_pegawai.nama_pegawai' => SORT_ASC],
+            'desc' => ['tabel_pegawai.nama_pegawai' => SORT_DESC]
+        ];
+
+        $dataProvider->sort->attributes['hari'] = [
+            'asc' => ['tabel_hari.hari' => SORT_ASC],
+            'desc' => ['tabel_hari.hari' => SORT_DESC]
+        ];
 
         $this->load($params);
 
@@ -63,10 +75,12 @@ class TabelJadwalSearch extends TabelJadwal
             'id_pegawai' => $this->id_pegawai,
             'jam_mulai_jadwal' => $this->jam_mulai_jadwal,
             'jam_berakhir_jadwal' => $this->jam_berakhir_jadwal,
+            'id_hari_jadwal'=> $this->id_hari_jadwal
         ]);
 
-        $query->andFilterWhere(['like', 'hari_jadwal', $this->hari_jadwal])
-            ->andFilterWhere(['like', 'ruang', $this->ruang]);
+        $query->andFilterWhere(['like', 'ruang', $this->ruang])
+            ->andFilterWhere(['like', 'tabel_pegawai.nama_pegawai', $this->dokter])
+            ->andFilterWhere(['like', 'tabel_hari.hari', $this->hari]);
 
         return $dataProvider;
     }

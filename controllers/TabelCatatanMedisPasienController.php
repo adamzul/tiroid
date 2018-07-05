@@ -8,6 +8,7 @@ use app\models\TabelCatatanMedisPasienSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\filters\AccessControl;
 
 /**
  * TabelCatatanMedisPasienController implements the CRUD actions for TabelCatatanMedisPasien model.
@@ -25,6 +26,11 @@ class TabelCatatanMedisPasienController extends Controller
                 'actions' => [
                     'delete' => ['POST'],
                 ],
+            ],
+            'access' => [
+                'class' => AccessControl::className(),
+                'rules' => [['actions' => ['index', 'create', 'update', 'delete', 'view',],'allow' => true,'roles' => ['@']],
+                    ]
             ],
         ];
     }
@@ -65,7 +71,9 @@ class TabelCatatanMedisPasienController extends Controller
     {
         $model = new TabelCatatanMedisPasien();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post())) {
+            $model->id_pegawai = Yii::$app->user->identity->id_pegawai;
+            $model->save();
             return $this->redirect(['view', 'id' => $model->id_catatan_medis_pasien]);
         } else {
             return $this->render('create', [

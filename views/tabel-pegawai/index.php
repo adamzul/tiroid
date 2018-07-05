@@ -26,9 +26,16 @@ $this->params['breadcrumbs'][] = $this->title;
 
             'id_pegawai',
             'nama_pegawai',
-            'jenis_kelamin_pegawai',
+            [
+                'attribute' => 'jenis_kelamin',
+                'value' => 'tabelJenisKelamin.jenis_kelamin'
+            ],
             'tanggal_lahir_pegawai',
             'alamat_pegawai',
+            [
+                'attribute' => 'role',
+                'value' => 'tabelRole.role'
+            ],
             // 'no_telpon_pegawai',
             // 'username_pegawai',
             // 'password_pegawai',

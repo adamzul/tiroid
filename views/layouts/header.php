@@ -269,6 +269,7 @@ use yii\helpers\Html;
                             </div>
                         </li>
                     </ul>
+                    
                 </li>
 
                 <!-- User Account: style can be found in dropdown.less -->

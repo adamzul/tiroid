@@ -20,8 +20,11 @@
         "yiisoft/yii2-swiftmailer": "~2.0.0",
         "dmstr/yii2-adminlte-asset": "2.*",
         "fxp/composer-asset-plugin": "^1.4",
-        "kreait/firebase-php": "4.0",
-        "kartik-v/yii2-widget-datepicker": "@dev"
+        "kreait/firebase-php": "^4.0",
+        "kartik-v/yii2-widget-datepicker": "@dev",
+        "kartik-v/yii2-widget-timepicker": "*",
+        "google/apiclient": "*",
+        "kunalvarma05/dropbox-php-sdk": "^0.2.1"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",

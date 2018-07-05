@@ -8,12 +8,18 @@ use app\models\TabelPegawaiSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\filters\AccessControl;
+
+use app\connection_firebase\ConnectionFirebase;
+
 
 /**
  * TabelPegawaiController implements the CRUD actions for TabelPegawai model.
  */
 class TabelPegawaiController extends Controller
 {
+    public $connection;
+
     /**
      * @inheritdoc
      */
@@ -26,7 +32,17 @@ class TabelPegawaiController extends Controller
                     'delete' => ['POST'],
                 ],
             ],
+            'access' => [
+                'class' => AccessControl::className(),
+                'rules' => [['actions' => ['index', 'create', 'update', 'delete', 'view',],'allow' => true,'roles' => ['@']],
+                ]
+            ],
         ];
+    }
+
+    public function beforeAction($event){
+        $this->connection = (new ConnectionFirebase('doctor'))->reference;
+        return parent::beforeAction($event);
     }
 
     /**
@@ -65,7 +81,14 @@ class TabelPegawaiController extends Controller
     {
         $model = new TabelPegawai();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post()) ) {
+            $model->password_pegawai = md5($model->password_pegawai);
+            $model->save();
+            if($model->id_role_pegawai == 1){
+                $this->connection->getChild($model->id_pegawai)->set(['name' => $model->nama_pegawai]);
+            }
+            
+
             return $this->redirect(['view', 'id' => $model->id_pegawai]);
         } else {
             return $this->render('create', [
@@ -85,6 +108,9 @@ class TabelPegawaiController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            if($model->id_role_pegawai == 1){
+                $this->connection->getChild($model->id_pegawai)->set(['name' => $model->nama_pegawai]);
+            }
             return $this->redirect(['view', 'id' => $model->id_pegawai]);
         } else {
             return $this->render('update', [

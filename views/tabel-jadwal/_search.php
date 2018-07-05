@@ -19,7 +19,7 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'id_pegawai') ?>
 
-    <?= $form->field($model, 'hari_jadwal') ?>
+    <?= $form->field($model, 'id_hari_jadwal') ?>
 
     <?= $form->field($model, 'jam_mulai_jadwal') ?>
 

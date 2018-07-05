@@ -12,6 +12,7 @@ use app\models\TabelPasien;
  */
 class TabelPasienSearch extends TabelPasien
 {
+    public $jenis_kelamin;
     /**
      * @inheritdoc
      */
@@ -19,7 +20,7 @@ class TabelPasienSearch extends TabelPasien
     {
         return [
             [['id_pasien'], 'integer'],
-            [['nama_pasien', 'jenis_kelamin_pasien', 'tanggal_lahir', 'alamat', 'username_pasien', 'password_pasien'], 'safe'],
+            [['nama_pasien', 'jenis_kelamin_pasien', 'tanggal_lahir', 'alamat', 'email_pasien', 'password_pasien', 'id_firebase', 'jenis_kelamin'], 'safe'],
         ];
     }
 
@@ -42,12 +43,17 @@ class TabelPasienSearch extends TabelPasien
     public function search($params)
     {
         $query = TabelPasien::find();
-
+        $query->joinWith(['tabelJenisKelamin']);
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
+
+        $dataProvider->sort->attributes['jenis_kelamin'] = [
+            'asc' => ['tabel_jenis_kelamin.jenis_kelamin' => SORT_ASC],
+            'desc' => ['tabel_jenis_kelamin.jenis_kelamin' => SORT_DESC]
+        ];
 
         $this->load($params);
 
@@ -64,10 +70,11 @@ class TabelPasienSearch extends TabelPasien
         ]);
 
         $query->andFilterWhere(['like', 'nama_pasien', $this->nama_pasien])
-            ->andFilterWhere(['like', 'jenis_kelamin_pasien', $this->jenis_kelamin_pasien])
             ->andFilterWhere(['like', 'alamat', $this->alamat])
-            ->andFilterWhere(['like', 'username_pasien', $this->username_pasien])
-            ->andFilterWhere(['like', 'password_pasien', $this->password_pasien]);
+            ->andFilterWhere(['like', 'email_pasien', $this->email_pasien])
+            ->andFilterWhere(['like', 'password_pasien', $this->password_pasien])
+            ->andFilterWhere(['like', 'id_firebase', $this->id_firebase])
+            ->andFilterWhere(['like', 'tabel_jenis_kelamin.jenis_kelamin', $this->jenis_kelamin]);
 
         return $dataProvider;
     }

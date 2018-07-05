@@ -25,8 +25,14 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\SerialColumn'],
 
             'id_jadwal_dokter',
-            'id_pegawai',
-            'hari_jadwal',
+            [
+                'attribute' => 'dokter',
+                'value' => 'tabelPegawai.nama_pegawai'
+            ],
+            [
+                'attribute' => 'hari',
+                'value' => 'tabelHari.hari'
+            ],
             'jam_mulai_jadwal',
             'jam_berakhir_jadwal',
             // 'ruang',

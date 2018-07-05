@@ -8,6 +8,7 @@ use app\models\TabelArtikelSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\filters\AccessControl;
 
 use app\connection_firebase\ConnectionFirebase;
 use app\decision_tree\DecisionTree;
@@ -29,6 +30,11 @@ class TabelArtikelController extends Controller
                 'actions' => [
                     'delete' => ['POST'],
                 ],
+            ],
+            'access' => [
+                'class' => AccessControl::className(),
+                'rules' => [['actions' => ['index', 'create', 'update', 'delete', 'view',],'allow' => true,'roles' => ['@']],
+                ]
             ],
         ];
     }

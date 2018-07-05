@@ -1,8 +1,11 @@
 <?php
 
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
+use app\models\DownloadImage;
+
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\TabelHasilPemeriksaanSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -25,13 +28,37 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\SerialColumn'],
 
             'id_hasil_pemeriksaan',
-            'id_pasien',
-            'id_pegawai',
+            [
+                'attribute' => 'pasien',
+                'value' => 'tabelPasien.nama_pasien'
+            ],
+            [
+                'attribute' => 'jenis_pemeriksaan',
+                'value' => 'tabelJenisPemeriksaan.jenis_pemeriksaan'
+            ],
+            'tanggal_pemeriksaan',
             'hasil_pemeriksaan:ntext',
             'foto',
-            // 'tanggal_pemeriksaan',
+            array(
+                'format' => ['image', ['width' => '100', 'height' => '100']],
+                'value' => function($data){
+                    if($data->foto == null){
+                        return;
+                    }
+                    $downloadImage = new DownloadImage('/'.$data->foto);
+                    return $downloadImage->download();
+                    // $url = Url::to('@web').'/../upload/hasil_pemeriksaan/'.$data->foto;
+                    // // var_dump($url);
+                    // return Html::img($url, ['alt'=>'myImage','width'=>'700','height'=>'500']);
+                }
+            ),
 
             ['class' => 'yii\grid\ActionColumn'],
         ],
     ]); ?>
 <?php Pjax::end(); ?></div>
+
+<?php
+// $downloadImage = new DownloadImage('/1530377498171.jpg');
+// echo '<img src="'.$downloadImage->download().'" />';
+ ?>

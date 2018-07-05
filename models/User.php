@@ -6,10 +6,10 @@ use app\models\TabelPegawai;
 class User extends \yii\base\Object implements \yii\web\IdentityInterface
 {
     public $id_pegawai;
-    public $role_pegawai;
+    public $id_role_pegawai;
     public $nama_pegawai;
     public $password;
-    public $jenis_kelamin_pegawai;
+    public $id_jenis_kelamin_pegawai;
     public $tanggal_lahir_pegawai;
     public $alamat_pegawai;
     public $no_telpon_pegawai;

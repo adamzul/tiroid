@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
-/* @var $model app\models\TabelJadwalPemeriksaan */
+/* @var $model app\Models\TabelJadwalPemeriksaan */
 
 $this->title = $model->id_jadwal_pemeriksaan;
 $this->params['breadcrumbs'][] = ['label' => 'Tabel Jadwal Pemeriksaans', 'url' => ['index']];
@@ -31,6 +31,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'id_jadwal_pemeriksaan',
             'id_pasien',
             'id_pegawai',
+            'id_jenis_pemeriksaan',
             'jadwal_pemeriksaan',
         ],
     ]) ?>

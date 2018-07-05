@@ -8,6 +8,7 @@ use app\models\TabelPenyakitSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\filters\AccessControl;
 
 /**
  * TabelPenyakitController implements the CRUD actions for TabelPenyakit model.
@@ -25,6 +26,11 @@ class TabelPenyakitController extends Controller
                 'actions' => [
                     'delete' => ['POST'],
                 ],
+            ],
+            'access' => [
+                'class' => AccessControl::className(),
+                'rules' => [['actions' => ['index', 'create', 'update', 'delete', 'view',],'allow' => true,'roles' => ['@']],
+                ]
             ],
         ];
     }

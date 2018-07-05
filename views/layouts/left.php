@@ -36,7 +36,7 @@
                     ['label' => 'catatan medis pasien',  'url' => ['/tabel-catatan-medis-pasien']],
                     ['label' => 'hasil pemeriksaan',  'url' => ['/tabel-hasil-pemeriksaan']],
                     ['label' => 'jadwal',  'url' => ['/tabel-jadwal']],
-                    ['label' => 'jadwal pemeriksaan',  'url' => ['/tabel-jadwa-pemeriksaan']],
+                    ['label' => 'jadwal pemeriksaan',  'url' => ['/tabel-jadwal-pemeriksaan']],
                     ['label' => 'notifikasi',  'url' => ['/tabel-notifikasi']],
                     ['label' => 'pasien',  'url' => ['/tabel-pasien']],
                     ['label' => 'pegawai',  'url' => ['/tabel-pegawai']],

@@ -12,6 +12,7 @@ use app\models\TabelHasilPemeriksaan;
  */
 class TabelHasilPemeriksaanSearch extends TabelHasilPemeriksaan
 {
+    public $pasien, $pegawai, $jenis_pemeriksaan;
     /**
      * @inheritdoc
      */
@@ -19,7 +20,7 @@ class TabelHasilPemeriksaanSearch extends TabelHasilPemeriksaan
     {
         return [
             [['id_hasil_pemeriksaan', 'id_pasien', 'id_pegawai'], 'integer'],
-            [['hasil_pemeriksaan', 'foto', 'tanggal_pemeriksaan'], 'safe'],
+            [['hasil_pemeriksaan', 'foto', 'tanggal_pemeriksaan', 'pasien', 'pegawai', 'jenis_pemeriksaan'], 'safe'],
         ];
     }
 
@@ -42,12 +43,20 @@ class TabelHasilPemeriksaanSearch extends TabelHasilPemeriksaan
     public function search($params)
     {
         $query = TabelHasilPemeriksaan::find();
-
+        $query->joinWith(['tabelPasien', 'tabelPegawai']);
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
+        $dataProvider->sort->attributes['pasien'] = [
+            'asc' => ['tabel_pasien.nama_pasien' => SORT_ASC],
+            'desc' => ['tabel_pasien.nama_pasien' => SORT_DESC]
+        ];
+        $dataProvider->sort->attributes['jenis_pemeriksaan'] = [
+            'asc' => ['tabel_jenis_pemeriksaan.jenis_pemeriksaan' => SORT_ASC],
+            'desc' => ['tabel_jenis_pemeriksaan.jenis_pemeriksaan' => SORT_DESC]
+        ];
 
         $this->load($params);
 
@@ -66,7 +75,9 @@ class TabelHasilPemeriksaanSearch extends TabelHasilPemeriksaan
         ]);
 
         $query->andFilterWhere(['like', 'hasil_pemeriksaan', $this->hasil_pemeriksaan])
-            ->andFilterWhere(['like', 'foto', $this->foto]);
+            ->andFilterWhere(['like', 'foto', $this->foto])
+            ->andFilterWhere(['like', 'tabel_pasien.nama_pasien', $this->pasien])
+            ->andFilterWhere(['like', 'tabel_jenis_pemeriksaan.nama_pasien', $this->jenis_pemeriksaan]);
 
         return $dataProvider;
     }

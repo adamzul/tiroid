@@ -9,7 +9,7 @@ use Yii;
  *
  * @property integer $id_pasien
  * @property string $nama_pasien
- * @property string $jenis_kelamin_pasien
+ * @property integer $id_jenis_kelamin_pasien
  * @property string $tanggal_lahir
  * @property string $alamat
  * @property string $username_pasien
@@ -37,11 +37,12 @@ class TabelPasien extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
+            [['id_jenis_kelamin_pasien'], 'integer'],
             [['tanggal_lahir'], 'safe'],
-            [['nama_pasien', 'username_pasien'], 'string', 'max' => 30],
-            [['jenis_kelamin_pasien'], 'string', 'max' => 1],
+            [['nama_pasien', 'email_pasien'], 'string', 'max' => 30],
             [['alamat'], 'string', 'max' => 50],
-            [['password_pasien'], 'string', 'max' => 60],
+            [['password_pasien'], 'string', 'max' => 60, 'min' => 6],
+            [['id_firebase'], 'string', 'max' => 100],
         ];
     }
 
@@ -53,11 +54,12 @@ class TabelPasien extends \yii\db\ActiveRecord
         return [
             'id_pasien' => 'Id Pasien',
             'nama_pasien' => 'Nama Pasien',
-            'jenis_kelamin_pasien' => 'Jenis Kelamin Pasien',
+            'id_jenis_kelamin_pasien' => 'Id Jenis Kelamin Pasien',
             'tanggal_lahir' => 'Tanggal Lahir',
             'alamat' => 'Alamat',
-            'username_pasien' => 'Username Pasien',
+            'email_pasien' => 'Email Pasien',
             'password_pasien' => 'Password Pasien',
+            'id_firebase' => 'Id Firebase'
         ];
     }
 
@@ -99,5 +101,12 @@ class TabelPasien extends \yii\db\ActiveRecord
     public function getTabelPrediksis()
     {
         return $this->hasMany(TabelPrediksi::className(), ['id_pasien' => 'id_pasien']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getTabelJenisKelamin(){
+        return $this->hasOne(TabelJenisKelamin::classname(), ['id_jenis_kelamin' => 'id_jenis_kelamin_pasien']);
     }
 }

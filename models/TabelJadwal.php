@@ -34,7 +34,7 @@ class TabelJadwal extends \yii\db\ActiveRecord
         return [
             [['id_pegawai'], 'integer'],
             [['jam_mulai_jadwal', 'jam_berakhir_jadwal'], 'safe'],
-            [['hari_jadwal'], 'string', 'max' => 10],
+            [['id_hari_jadwal'], 'string', 'max' => 10],
             [['ruang'], 'string', 'max' => 20],
             [['id_pegawai'], 'exist', 'skipOnError' => true, 'targetClass' => TabelPegawai::className(), 'targetAttribute' => ['id_pegawai' => 'id_pegawai']],
         ];
@@ -48,9 +48,9 @@ class TabelJadwal extends \yii\db\ActiveRecord
         return [
             'id_jadwal_dokter' => 'Id Jadwal Dokter',
             'id_pegawai' => 'Id Pegawai',
-            'hari_jadwal' => 'Hari Jadwal',
-            'jam_mulai_jadwal' => 'Jam Mulai Jadwal',
-            'jam_berakhir_jadwal' => 'Jam Berakhir Jadwal',
+            'id_hari_jadwal' => 'Id Hari Jadwal',
+            'jam_mulai_jadwal' => 'Jam Mulai',
+            'jam_berakhir_jadwal' => 'Jam Berakhir',
             'ruang' => 'Ruang',
         ];
     }
@@ -58,8 +58,15 @@ class TabelJadwal extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getIdPegawai()
+    public function getTabelPegawai()
     {
         return $this->hasOne(TabelPegawai::className(), ['id_pegawai' => 'id_pegawai']);
+    }
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getTabelHari()
+    {
+        return $this->hasOne(TabelHari::className(), ['id_hari' => 'id_hari_jadwal']);
     }
 }

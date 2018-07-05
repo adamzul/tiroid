@@ -58,7 +58,7 @@ class TabelCatatanMedisPasien extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getIdPegawai()
+    public function getTabelPegawai()
     {
         return $this->hasOne(TabelPegawai::className(), ['id_pegawai' => 'id_pegawai']);
     }
@@ -66,7 +66,7 @@ class TabelCatatanMedisPasien extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getIdPasien()
+    public function getTabelPasien()
     {
         return $this->hasOne(TabelPasien::className(), ['id_pasien' => 'id_pasien']);
     }
@@ -74,8 +74,15 @@ class TabelCatatanMedisPasien extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getIdPenyakit()
+    public function getTabelPenyakit()
     {
         return $this->hasOne(TabelPenyakit::className(), ['id_penyakit' => 'id_penyakit']);
     }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    // public function getTabelPenyakit(){
+    //     return $this->hasOne(TabelPenyakit)
+    // }
 }

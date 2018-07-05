@@ -5,15 +5,28 @@ namespace app\controllers;
 use Yii;
 use app\models\TabelHasilPemeriksaan;
 use app\models\TabelHasilPemeriksaanSearch;
+use app\models\UploadImage;
+use app\models\DownloadImage;
+use app\models\TabelPasien;
+use app\models\TabelJenisPemeriksaan;
+
+use Kunnu\Dropbox\Dropbox;
+use Kunnu\Dropbox\DropboxApp;
+
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\filters\AccessControl;
+use yii\web\UploadedFile;
+use app\connection_firebase\ConnectionFirebase;
+
 
 /**
  * TabelHasilPemeriksaanController implements the CRUD actions for TabelHasilPemeriksaan model.
  */
 class TabelHasilPemeriksaanController extends Controller
 {
+    public $connection;
     /**
      * @inheritdoc
      */
@@ -26,7 +39,17 @@ class TabelHasilPemeriksaanController extends Controller
                     'delete' => ['POST'],
                 ],
             ],
+            'access' => [
+                'class' => AccessControl::className(),
+                'rules' => [['actions' => ['index', 'create', 'update', 'delete', 'view',],'allow' => true,'roles' => ['@']],
+                    ]
+            ],
         ];
+    }
+
+    public function beforeAction($event){
+        $this->connection = (new ConnectionFirebase('checkUpResult'))->reference;
+        return parent::beforeAction($event);
     }
 
     /**
@@ -37,6 +60,7 @@ class TabelHasilPemeriksaanController extends Controller
     {
         $searchModel = new TabelHasilPemeriksaanSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
 
         return $this->render('index', [
             'searchModel' => $searchModel,
@@ -63,13 +87,25 @@ class TabelHasilPemeriksaanController extends Controller
      */
     public function actionCreate()
     {
+        $directory = "../upload/hasil_pemeriksaan/";
+        $nameImage = round(microtime(true) * 1000);
         $model = new TabelHasilPemeriksaan();
+        $upload = new UploadImage($directory, $nameImage);
+        // $storage = (new ConnectionFirebase())->storageRef;
+        // $image = $storage->getChild
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id_hasil_pemeriksaan]);
+        if ($model->load(Yii::$app->request->post())) {
+            $upload->imageFile = UploadedFile::getInstance($upload, 'imageFile');
+            if($upload->upload()){
+                $model->foto = $nameImage.'.'.$upload->imageFile->extension;
+            
+                $model->save();
+                $this->saveToFirebase($model);
+                return $this->redirect(['view', 'id' => $model->id_hasil_pemeriksaan]);         
+            }
         } else {
             return $this->render('create', [
-                'model' => $model,
+                'model' => $model, 'upload' => $upload
             ]);
         }
     }
@@ -83,12 +119,22 @@ class TabelHasilPemeriksaanController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        $directory = "../upload/hasil_pemeriksaan/";
+        $nameImage = round(microtime(true) * 1000);
+        $upload = new UploadImage($directory, $nameImage);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post())) {
+            $upload->imageFile = UploadedFile::getInstance($upload, 'imageFile');
+
+            if($upload->upload()){
+                $model->foto = $nameImage.'.'.$upload->imageFile->extension;
+            }
+            $model->save();
+            $this->saveToFirebase($model);
             return $this->redirect(['view', 'id' => $model->id_hasil_pemeriksaan]);
         } else {
             return $this->render('update', [
-                'model' => $model,
+                'model' => $model, 'upload' => $upload
             ]);
         }
     }
@@ -101,8 +147,11 @@ class TabelHasilPemeriksaanController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
-
+        $model = $this->findModel($id);
+        $jenisPemeriksaan = TabelJenisPemeriksaan::findOne($model->id_jenis_pemeriksaan_pasien);
+        $pasien = TabelPasien::findOne($model->id_pasien);
+        $newPost = $this->connection->getChild($pasien->id_firebase.'/'.$model->id_hasil_pemeriksaan)->remove();
+        $model->delete();
         return $this->redirect(['index']);
     }
 
@@ -120,5 +169,12 @@ class TabelHasilPemeriksaanController extends Controller
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
+    }
+
+    private function saveToFirebase($model){
+        $jenisPemeriksaan = TabelJenisPemeriksaan::findOne($model->id_jenis_pemeriksaan_pasien);
+        $pasien = TabelPasien::findOne($model->id_pasien);
+        $newPost = $this->connection->getChild($pasien->id_firebase.'/'.$model->id_hasil_pemeriksaan)
+            ->set(["contentTitle" => $jenisPemeriksaan->jenis_pemeriksaan, "content" => $model->hasil_pemeriksaan, "date" => $model->tanggal_pemeriksaan, "image" => $model->foto]); 
     }
 }

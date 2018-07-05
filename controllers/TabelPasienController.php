@@ -3,17 +3,20 @@
 namespace app\controllers;
 
 use Yii;
-use app\models\TabelPasien;
-use app\models\TabelPasienSearch;
+use app\Models\TabelPasien;
+use app\Models\TabelPasienSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\filters\AccessControl;
+use app\connection_firebase\ConnectionFirebase;
 
 /**
  * TabelPasienController implements the CRUD actions for TabelPasien model.
  */
 class TabelPasienController extends Controller
 {
+    public $auth;
     /**
      * @inheritdoc
      */
@@ -26,7 +29,17 @@ class TabelPasienController extends Controller
                     'delete' => ['POST'],
                 ],
             ],
+            'access' => [
+                'class' => AccessControl::className(),
+                'rules' => [['actions' => ['index', 'create', 'update', 'delete', 'view',],'allow' => true,'roles' => ['@']],
+                ]
+            ],
         ];
+    }
+
+    public function beforeAction($event){
+        $this->auth = (new ConnectionFirebase())->auth;
+        return parent::beforeAction($event);
     }
 
     /**
@@ -65,7 +78,19 @@ class TabelPasienController extends Controller
     {
         $model = new TabelPasien();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post())) {
+            $userProperties = [
+                'email' => $model->email_pasien,
+                'emailVerified' => false,
+                'password' => $model->password_pasien,
+                'disabled' => false,
+            ];
+            $createdUser = $this->auth->createUser($userProperties);
+            $model->password_pasien = md5($model->password_pasien);
+            // $newPost = $this->connection->getChild($model->id_artikel)
+                // ->set(["contentTitle" => $model->judul_artikel, "content" => $model->konten_artikel]);
+            $model->id_firebase = $createdUser->uid;
+            $model->save();
             return $this->redirect(['view', 'id' => $model->id_pasien]);
         } else {
             return $this->render('create', [

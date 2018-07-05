@@ -8,8 +8,9 @@ use Yii;
  * This is the model class for table "tabel_pegawai".
  *
  * @property integer $id_pegawai
+ * @property integer $id_role_pegawai
  * @property string $nama_pegawai
- * @property string $jenis_kelamin_pegawai
+ * @property string $id_jenis_kelamin_pegawai
  * @property string $tanggal_lahir_pegawai
  * @property string $alamat_pegawai
  * @property string $no_telpon_pegawai
@@ -40,9 +41,11 @@ class TabelPegawai extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
+            [['id_role_pegawai'], 'required'],
+            [['id_role_pegawai'], 'integer'],
             [['tanggal_lahir_pegawai'], 'safe'],
             [['nama_pegawai', 'username_pegawai'], 'string', 'max' => 30],
-            [['jenis_kelamin_pegawai'], 'string', 'max' => 1],
+            [['id_jenis_kelamin_pegawai'], 'string', 'max' => 1],
             [['alamat_pegawai'], 'string', 'max' => 50],
             [['no_telpon_pegawai'], 'string', 'max' => 15],
             [['password_pegawai'], 'string', 'max' => 60],
@@ -56,8 +59,9 @@ class TabelPegawai extends \yii\db\ActiveRecord
     {
         return [
             'id_pegawai' => 'Id Pegawai',
+            'id_role_pegawai' => 'Id Role Pegawai',
             'nama_pegawai' => 'Nama Pegawai',
-            'jenis_kelamin_pegawai' => 'Jenis Kelamin Pegawai',
+            'id_jenis_kelamin_pegawai' => 'Id Jenis Kelamin Pegawai',
             'tanggal_lahir_pegawai' => 'Tanggal Lahir Pegawai',
             'alamat_pegawai' => 'Alamat Pegawai',
             'no_telpon_pegawai' => 'No Telpon Pegawai',
@@ -120,5 +124,21 @@ class TabelPegawai extends \yii\db\ActiveRecord
     public function getTabelNotifikasis()
     {
         return $this->hasMany(TabelNotifikasi::className(), ['id_pegawai' => 'id_pegawai']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getTabelRole()
+    {
+        return $this->hasOne(TabelRole::className(), ['id_role' => 'id_role_pegawai']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getTabelJenisKelamin()
+    {
+        return $this->hasOne(TabelJenisKelamin::className(), ['id_jenis_kelamin' => 'id_jenis_kelamin_pegawai']);
     }
 }

@@ -12,6 +12,8 @@ use app\models\TabelCatatanMedisPasien;
  */
 class TabelCatatanMedisPasienSearch extends TabelCatatanMedisPasien
 {
+    public $pasien, $penyakit;
+
     /**
      * @inheritdoc
      */
@@ -19,7 +21,7 @@ class TabelCatatanMedisPasienSearch extends TabelCatatanMedisPasien
     {
         return [
             [['id_catatan_medis_pasien', 'id_penyakit', 'id_pasien', 'id_pegawai'], 'integer'],
-            [['catatan'], 'safe'],
+            [['catatan', 'pasien', 'penyakit'], 'safe'],
         ];
     }
 
@@ -48,7 +50,14 @@ class TabelCatatanMedisPasienSearch extends TabelCatatanMedisPasien
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
-
+        $dataProvider->sort->attributes['pasien'] = [
+            'asc' => ['tabel_pasien.nama_pasien' => SORT_ASC],
+            'desc' => ['tabel_pasien.nama_pasien' => SORT_DESC]
+        ];
+        $dataProvider->sort->attributes['penyakit'] = [
+            'asc' => ['tabel_penyakit.nama_penyakit' => SORT_ASC],
+            'desc' => ['tabel_penyakit.nama_penyakit' => SORT_DESC]
+        ];
         $this->load($params);
 
         if (!$this->validate()) {
@@ -65,7 +74,9 @@ class TabelCatatanMedisPasienSearch extends TabelCatatanMedisPasien
             'id_pegawai' => $this->id_pegawai,
         ]);
 
-        $query->andFilterWhere(['like', 'catatan', $this->catatan]);
+        $query->andFilterWhere(['like', 'catatan', $this->catatan])
+            ->andFilterWhere(['like', 'tabel_pasien.nama_pasien', $this->pasien])
+            ->andFilterWhere(['like', 'tabel_penyakit.nama_penyakit', $this->penyakit]);
 
         return $dataProvider;
     }

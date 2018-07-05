@@ -25,10 +25,17 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\SerialColumn'],
 
             'id_catatan_medis_pasien',
-            'id_penyakit',
-            'id_pasien',
-            'id_pegawai',
+            
+            [
+                'attribute' => 'pasien',
+                'value' => 'tabelPasien.nama_pasien'
+            ],
+            [
+            'attribute' => 'penyakit',
+            'value' => 'tabelPenyakit.nama_penyakit'                
+            ],
             'catatan:ntext',
+            
 
             ['class' => 'yii\grid\ActionColumn'],
         ],

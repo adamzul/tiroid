@@ -12,6 +12,7 @@ use app\Models\TabelPegawai;
  */
 class TabelPegawaiSearch extends TabelPegawai
 {
+    public $role, $jenis_kelamin;
     /**
      * @inheritdoc
      */
@@ -19,7 +20,7 @@ class TabelPegawaiSearch extends TabelPegawai
     {
         return [
             [['id_pegawai'], 'integer'],
-            [['nama_pegawai', 'jenis_kelamin_pegawai', 'tanggal_lahir_pegawai', 'alamat_pegawai', 'no_telpon_pegawai', 'username_pegawai', 'password_pegawai'], 'safe'],
+            [['nama_pegawai', 'id_jenis_kelamin_pegawai', 'tanggal_lahir_pegawai', 'alamat_pegawai', 'no_telpon_pegawai', 'username_pegawai', 'password_pegawai', 'id_role_pegawai', 'role', 'jenis_kelamin'], 'safe'],
         ];
     }
 
@@ -42,12 +43,23 @@ class TabelPegawaiSearch extends TabelPegawai
     public function search($params)
     {
         $query = TabelPegawai::find();
+        $query->joinWith(['tabelJenisKelamin', 'tabelRole']);
 
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
+
+        $dataProvider->sort->attributes['jenis_kelamin'] = [
+            'asc' => ['tabel_jenis_kelamin.jenis_kelamin' => SORT_ASC],
+            'desc' => ['tabel_jenis_kelamin.jenis_kelamin' => SORT_DESC]
+        ];
+
+        $dataProvider->sort->attributes['role'] = [
+            'asc' => ['tabel_role.role' => SORT_ASC],
+            'desc' => ['tabel_role.role' => SORT_DESC]
+        ];
 
         $this->load($params);
 
@@ -64,11 +76,13 @@ class TabelPegawaiSearch extends TabelPegawai
         ]);
 
         $query->andFilterWhere(['like', 'nama_pegawai', $this->nama_pegawai])
-            ->andFilterWhere(['like', 'jenis_kelamin_pegawai', $this->jenis_kelamin_pegawai])
+            ->andFilterWhere(['like', 'id_jenis_kelamin_pegawai', $this->id_jenis_kelamin_pegawai])
             ->andFilterWhere(['like', 'alamat_pegawai', $this->alamat_pegawai])
             ->andFilterWhere(['like', 'no_telpon_pegawai', $this->no_telpon_pegawai])
             ->andFilterWhere(['like', 'username_pegawai', $this->username_pegawai])
-            ->andFilterWhere(['like', 'password_pegawai', $this->password_pegawai]);
+            ->andFilterWhere(['like', 'password_pegawai', $this->password_pegawai])
+            ->andFilterWhere(['like', 'tabel_jenis_kelamin.jenis_kelamin', $this->jenis_kelamin])
+            ->andFilterWhere(['like', 'tabel_role.role', $this->role]);
 
         return $dataProvider;
     }

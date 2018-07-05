@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
 /* @var $this yii\web\View */
-/* @var $searchModel app\models\TabelPasienSearch */
+/* @var $searchModel app\Models\TabelPasienSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = 'Tabel Pasiens';
@@ -26,10 +26,14 @@ $this->params['breadcrumbs'][] = $this->title;
 
             'id_pasien',
             'nama_pasien',
-            'jenis_kelamin_pasien',
+            // 'id_jenis_kelamin_pasien',
             'tanggal_lahir',
             'alamat',
-            // 'username_pasien',
+            [
+                'attribute' => 'jenis_kelamin',
+                'value' => 'tabelJenisKelamin.jenis_kelamin'
+            ],
+            'email_pasien',
             // 'password_pasien',
 
             ['class' => 'yii\grid\ActionColumn'],

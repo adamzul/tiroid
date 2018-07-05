@@ -33,12 +33,13 @@ class TabelHasilPemeriksaan extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id_pasien', 'id_pegawai'], 'integer'],
+            [['id_pasien', 'id_pegawai', 'id_jenis_pemeriksaan_pasien'], 'integer'],
             [['hasil_pemeriksaan'], 'string'],
             [['tanggal_pemeriksaan'], 'safe'],
             [['foto'], 'string', 'max' => 50],
             [['id_pegawai'], 'exist', 'skipOnError' => true, 'targetClass' => TabelPegawai::className(), 'targetAttribute' => ['id_pegawai' => 'id_pegawai']],
             [['id_pasien'], 'exist', 'skipOnError' => true, 'targetClass' => TabelPasien::className(), 'targetAttribute' => ['id_pasien' => 'id_pasien']],
+            [['id_jenis_pemeriksaan_pasien'], 'exist', 'skipOnError' => true, 'targetClass' => TabelJenisPemeriksaan::className(), 'targetAttribute' => ['id_jenis_pemeriksaan_pasien' => 'id_jenis_pemeriksaan']],
         ];
     }
 
@@ -54,22 +55,32 @@ class TabelHasilPemeriksaan extends \yii\db\ActiveRecord
             'hasil_pemeriksaan' => 'Hasil Pemeriksaan',
             'foto' => 'Foto',
             'tanggal_pemeriksaan' => 'Tanggal Pemeriksaan',
+            'id_jenis_pemeriksaan_pasien' => 'Id Jenis Pemeriksaan Pasien'
         ];
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getIdPegawai()
+    public function getTabelPegawai()
     {
         return $this->hasOne(TabelPegawai::className(), ['id_pegawai' => 'id_pegawai']);
     }
 
-    /**
+    /** 
      * @return \yii\db\ActiveQuery
      */
-    public function getIdPasien()
+    public function getTabelPasien()
     {
         return $this->hasOne(TabelPasien::className(), ['id_pasien' => 'id_pasien']);
     }
+
+    /** 
+     * @return \yii\db\ActiveQuery
+     */
+    public function getTabelJenisPemeriksaan()
+    {
+        return $this->hasOne(TabelJenisPemeriksaan::className(), ['id_jenis_pemeriksaan' => 'id_jenis_pemeriksaan_pasien']);
+    }
 }
+
