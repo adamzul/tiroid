@@ -1,7 +1,11 @@
 <?php
 
 use yii\helpers\Html;
+use yii\helpers\ArrayHelper;
 use yii\widgets\ActiveForm;
+use app\models\TabelPasien;
+use app\models\TabelJenisKelamin;
+
 
 /* @var $this yii\web\View */
 /* @var $model app\models\TabelPrediksi */
@@ -9,31 +13,30 @@ use yii\widgets\ActiveForm;
 ?>
 
 <div class="tabel-prediksi-form">
+    <?php $arrayRiwayat = [['riwayat'=> 'yes'], ['riwayat'=> 'no']] ?>
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'id_prediksi')->textInput() ?>
+    <?= $form->field($model, 'id_pasien')->dropDownList(ArrayHelper::map(TabelPasien::find()->all(), 'id_pasien', 'nama_pasien'))->label('Pasien') ?>
 
-    <?= $form->field($model, 'id_pasien')->textInput() ?>
-
-    <?= $form->field($model, 'jenis_kelamin')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'jenis_kelamin')->dropDownList(ArrayHelper::map(TabelJenisKelamin::find()->all(), 'id_jenis_kelamin', 'jenis_kelamin'))->label('Jenis Kelamin') ?>
 
     <?= $form->field($model, 'usia')->textInput() ?>
 
-    <?= $form->field($model, 'hasil_pemeriksaan_usg')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'tekanan_sistolik')->textInput() ?>
 
-    <?= $form->field($model, 'hasil_pemeriksaan_klinis')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'tekanan_diastolik')->textInput() ?>
 
-    <?= $form->field($model, 'riwayat_penyakit_gondok')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'riwayat_penyakit_tiroid')->dropDownList(ArrayHelper::map($arrayRiwayat, 'riwayat', 'riwayat'))->label('Jenis Kelamin') ?>
 
-    <?= $form->field($model, 'riwayat_penyakit_keluarga')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'TSH')->textInput() ?>
 
-    <?= $form->field($model, 'hasil_prediksi')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'T4')->textInput() ?>
 
     <?= $form->field($model, 'catatan_dokter')->textarea(['rows' => 6]) ?>
 
     <div class="form-group">
-        <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+        <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

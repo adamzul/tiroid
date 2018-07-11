@@ -8,12 +8,16 @@ use app\models\TabelAppointmentSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use app\connection_firebase\ConnectionFirebase;
+
 
 /**
  * TabelAppointmentController implements the CRUD actions for TabelAppointment model.
  */
 class TabelAppointmentController extends Controller
 {
+    public $connection;
+
     /**
      * @inheritdoc
      */
@@ -28,6 +32,10 @@ class TabelAppointmentController extends Controller
             ],
         ];
     }
+    public function beforeAction($event){
+        $this->connection = (new ConnectionFirebase('appointment'))->reference;
+        return parent::beforeAction($event);
+    }
 
     /**
      * Lists all TabelAppointment models.
@@ -38,9 +46,12 @@ class TabelAppointmentController extends Controller
         $searchModel = new TabelAppointmentSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
+        $appointmentList = $this->connection->getValue();
+
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'appointmentList' => $appointmentList
         ]);
     }
 
@@ -103,6 +114,11 @@ class TabelAppointmentController extends Controller
     {
         $this->findModel($id)->delete();
 
+        return $this->redirect(['index']);
+    }
+
+    public function actionKonfirmasi($idPasien){
+        $this->connection->getChild($idPasien)->getChild('confirmation')->set(true);
         return $this->redirect(['index']);
     }
 

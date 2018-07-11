@@ -8,23 +8,24 @@ use yii\data\ActiveDataProvider;
 use app\models\TabelPrediksi;
 
 /**
- * TabelPrediksiSearch represents the model behind the search form about `app\models\TabelPrediksi`.
+ * TabelPrediksiSearch represents the model behind the search form of `app\models\TabelPrediksi`.
  */
 class TabelPrediksiSearch extends TabelPrediksi
 {
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function rules()
     {
         return [
-            [['id_prediksi', 'id_pasien', 'usia'], 'integer'],
-            [['jenis_kelamin', 'hasil_pemeriksaan_usg', 'hasil_pemeriksaan_klinis', 'riwayat_penyakit_gondok', 'riwayat_penyakit_keluarga', 'hasil_prediksi', 'catatan_dokter'], 'safe'],
+            [['id_prediksi', 'id_pasien', 'usia', 'tekanan_sistolik', 'tekanan_diastolik'], 'integer'],
+            [['jenis_kelamin', 'riwayat_penyakit_tiroid', 'hasil_prediksi', 'tanggal_input', 'catatan_dokter'], 'safe'],
+            [['TSH', 'T4'], 'number'],
         ];
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function scenarios()
     {
@@ -62,13 +63,15 @@ class TabelPrediksiSearch extends TabelPrediksi
             'id_prediksi' => $this->id_prediksi,
             'id_pasien' => $this->id_pasien,
             'usia' => $this->usia,
+            'tekanan_sistolik' => $this->tekanan_sistolik,
+            'tekanan_diastolik' => $this->tekanan_diastolik,
+            'TSH' => $this->TSH,
+            'T4' => $this->T4,
+            'tanggal_input' => $this->tanggal_input,
         ]);
 
         $query->andFilterWhere(['like', 'jenis_kelamin', $this->jenis_kelamin])
-            ->andFilterWhere(['like', 'hasil_pemeriksaan_usg', $this->hasil_pemeriksaan_usg])
-            ->andFilterWhere(['like', 'hasil_pemeriksaan_klinis', $this->hasil_pemeriksaan_klinis])
-            ->andFilterWhere(['like', 'riwayat_penyakit_gondok', $this->riwayat_penyakit_gondok])
-            ->andFilterWhere(['like', 'riwayat_penyakit_keluarga', $this->riwayat_penyakit_keluarga])
+            ->andFilterWhere(['like', 'riwayat_penyakit_tiroid', $this->riwayat_penyakit_tiroid])
             ->andFilterWhere(['like', 'hasil_prediksi', $this->hasil_prediksi])
             ->andFilterWhere(['like', 'catatan_dokter', $this->catatan_dokter]);
 

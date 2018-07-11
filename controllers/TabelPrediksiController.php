@@ -8,7 +8,8 @@ use app\models\TabelPrediksiSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use yii\filters\AccessControl;
+use app\decision_tree\Prediksi;
+use app\connection_firebase\ConnectionFirebase;
 
 /**
  * TabelPrediksiController implements the CRUD actions for TabelPrediksi model.
@@ -16,7 +17,7 @@ use yii\filters\AccessControl;
 class TabelPrediksiController extends Controller
 {
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function behaviors()
     {
@@ -27,13 +28,13 @@ class TabelPrediksiController extends Controller
                     'delete' => ['POST'],
                 ],
             ],
-            'access' => [
-                'class' => AccessControl::className(),
-                'rules' => [['actions' => ['index', 'create', 'update', 'delete', 'view',],'allow' => true,'roles' => ['@']],
-                ]
-            ],
         ];
     }
+
+    // public function beforeAction($event){
+    //     $this->connection = (new ConnectionFirebase('checkUpResult'))->reference;
+    //     return parent::beforeAction($event);
+    // }
 
     /**
      * Lists all TabelPrediksi models.
@@ -54,6 +55,7 @@ class TabelPrediksiController extends Controller
      * Displays a single TabelPrediksi model.
      * @param integer $id
      * @return mixed
+     * @throws NotFoundHttpException if the model cannot be found
      */
     public function actionView($id)
     {
@@ -71,13 +73,16 @@ class TabelPrediksiController extends Controller
     {
         $model = new TabelPrediksi();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post())) {
+            $model->hasil_prediksi = (new Prediksi())->getPrediksi($model);
+
+            $model->save(false);
             return $this->redirect(['view', 'id' => $model->id_prediksi]);
-        } else {
-            return $this->render('create', [
-                'model' => $model,
-            ]);
         }
+
+        return $this->render('create', [
+            'model' => $model,
+        ]);
     }
 
     /**
@@ -85,18 +90,21 @@ class TabelPrediksiController extends Controller
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
+     * @throws NotFoundHttpException if the model cannot be found
      */
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post())) {
+            $model->hasil_prediksi = (new Prediksi())->getPrediksi($model);
+            $model->save(false);
             return $this->redirect(['view', 'id' => $model->id_prediksi]);
-        } else {
-            return $this->render('update', [
-                'model' => $model,
-            ]);
         }
+
+        return $this->render('update', [
+            'model' => $model,
+        ]);
     }
 
     /**
@@ -104,6 +112,7 @@ class TabelPrediksiController extends Controller
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
+     * @throws NotFoundHttpException if the model cannot be found
      */
     public function actionDelete($id)
     {
@@ -123,8 +132,15 @@ class TabelPrediksiController extends Controller
     {
         if (($model = TabelPrediksi::findOne($id)) !== null) {
             return $model;
-        } else {
-            throw new NotFoundHttpException('The requested page does not exist.');
         }
+
+        throw new NotFoundHttpException('The requested page does not exist.');
+    }
+
+    private function saveToFirebase($model){
+        $jenisPemeriksaan = TabelJenisPemeriksaan::findOne($model->id_jenis_pemeriksaan_pasien);
+        $pasien = TabelPasien::findOne($model->id_pasien);
+        $newPost = $this->connection->getChild($pasien->id_firebase.'/'.$model->id_prediksi)
+            ->set(["name" => $pasien->nama_pasien, "gender" => $model->jenis_kelamin, "age" => $model->tanggal_pemeriksaan, "image" => $model->foto]); 
     }
 }

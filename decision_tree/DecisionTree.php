@@ -49,11 +49,11 @@ class DecisionTree
 
 	function getFitur(){
 		$tabel = new TabelDataset();
-		$listFitur = $tabel->attributeLabels();
+		$listFitur = $tabel->attribute();
 		array_pop($listFitur);
 		array_shift($listFitur);
 		foreach($listFitur as $keyListFitur => $valueListFitur){
-			$fitur = new Fitur(strtolower($valueListFitur));
+			$fitur = new Fitur($valueListFitur);
 		    $row = TabelDataset::find()->select($valueListFitur)->asArray()->all();
 		    $instance = [];
 		    foreach ($row as $keyRow => $valueRow) {

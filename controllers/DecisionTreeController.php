@@ -129,6 +129,7 @@ class DecisionTreeController extends \yii\web\Controller
     {
 
         $k = 10;
+        $akurasi = 100;
         $dataset =  TabelDataset::find()->asArray()->all(); 
         $jumlahDataset = count($dataset);       
         // $dataRules = TabelRule::find()->asArray()->all();
@@ -172,7 +173,7 @@ class DecisionTreeController extends \yii\web\Controller
             }
         }
         $akurasi = ($prediksiBenar/$jumlahDataset)*100;
-        
+        (new DecisionTree())->main();
         return $this->render('akurasi', [
             'akurasi' => $akurasi
         ]);

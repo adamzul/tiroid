@@ -13,6 +13,9 @@ use yii\widgets\ActiveForm;
     <?php $form = ActiveForm::begin([
         'action' => ['index'],
         'method' => 'get',
+        'options' => [
+            'data-pjax' => 1
+        ],
     ]); ?>
 
     <?= $form->field($model, 'id_prediksi') ?>
@@ -23,15 +26,19 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'usia') ?>
 
-    <?= $form->field($model, 'hasil_pemeriksaan_usg') ?>
+    <?= $form->field($model, 'tekanan_sistolik') ?>
 
-    <?php // echo $form->field($model, 'hasil_pemeriksaan_klinis') ?>
+    <?php // echo $form->field($model, 'tekanan_diastolik') ?>
 
-    <?php // echo $form->field($model, 'riwayat_penyakit_gondok') ?>
+    <?php // echo $form->field($model, 'riwayat_penyakit_tiroid') ?>
 
-    <?php // echo $form->field($model, 'riwayat_penyakit_keluarga') ?>
+    <?php // echo $form->field($model, 'TSH') ?>
+
+    <?php // echo $form->field($model, 'T4') ?>
 
     <?php // echo $form->field($model, 'hasil_prediksi') ?>
+
+    <?php // echo $form->field($model, 'tanggal_input') ?>
 
     <?php // echo $form->field($model, 'catatan_dokter') ?>
 

@@ -7,23 +7,25 @@ use Yii;
 /**
  * This is the model class for table "tabel_prediksi".
  *
- * @property integer $id_prediksi
- * @property integer $id_pasien
+ * @property int $id_prediksi
+ * @property int $id_pasien
  * @property string $jenis_kelamin
- * @property integer $usia
- * @property string $hasil_pemeriksaan_usg
- * @property string $hasil_pemeriksaan_klinis
- * @property string $riwayat_penyakit_gondok
- * @property string $riwayat_penyakit_keluarga
+ * @property int $usia
+ * @property int $tekanan_sistolik
+ * @property int $tekanan_diastolik
+ * @property string $riwayat_penyakit_tiroid
+ * @property double $TSH
+ * @property double $T4
  * @property string $hasil_prediksi
+ * @property string $tanggal_input
  * @property string $catatan_dokter
  *
- * @property TabelPasien $idPasien
+ * @property TabelPasien $pasien
  */
 class TabelPrediksi extends \yii\db\ActiveRecord
 {
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public static function tableName()
     {
@@ -31,35 +33,40 @@ class TabelPrediksi extends \yii\db\ActiveRecord
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function rules()
     {
         return [
-            [['id_prediksi'], 'required'],
-            [['id_prediksi', 'id_pasien', 'usia'], 'integer'],
+            [['id_pasien', 'usia', 'tekanan_sistolik', 'tekanan_diastolik'], 'integer'],
+            [['tekanan_sistolik', 'tekanan_diastolik', 'riwayat_penyakit_tiroid', 'TSH', 'T4'], 'required'],
+            [['TSH', 'T4'], 'number'],
+            [['tanggal_input'], 'safe'],
             [['catatan_dokter'], 'string'],
             [['jenis_kelamin'], 'string', 'max' => 1],
-            [['hasil_pemeriksaan_usg', 'hasil_pemeriksaan_klinis', 'riwayat_penyakit_gondok', 'riwayat_penyakit_keluarga', 'hasil_prediksi'], 'string', 'max' => 10],
+            [['riwayat_penyakit_tiroid'], 'string', 'max' => 3],
+            [['hasil_prediksi'], 'string', 'max' => 10],
             [['id_pasien'], 'exist', 'skipOnError' => true, 'targetClass' => TabelPasien::className(), 'targetAttribute' => ['id_pasien' => 'id_pasien']],
         ];
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function attributeLabels()
     {
         return [
             'id_prediksi' => 'Id Prediksi',
             'id_pasien' => 'Id Pasien',
-            'jenis_kelamin' => 'Jenis Kelamin',
             'usia' => 'Usia',
-            'hasil_pemeriksaan_usg' => 'Hasil Pemeriksaan Usg',
-            'hasil_pemeriksaan_klinis' => 'Hasil Pemeriksaan Klinis',
-            'riwayat_penyakit_gondok' => 'Riwayat Penyakit Gondok',
-            'riwayat_penyakit_keluarga' => 'Riwayat Penyakit Keluarga',
+            'jenis_kelamin' => 'Jenis Kelamin',
+            'tekanan_sistolik' => 'Tekanan Sistolik',
+            'tekanan_diastolik' => 'Tekanan Diastolik',
+            'riwayat_penyakit_tiroid' => 'Riwayat Penyakit Tiroid',
+            'TSH' => 'Tsh',
+            'T4' => 'T4',
             'hasil_prediksi' => 'Hasil Prediksi',
+            'tanggal_input' => 'Tanggal Input',
             'catatan_dokter' => 'Catatan Dokter',
         ];
     }
@@ -67,8 +74,16 @@ class TabelPrediksi extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getIdPasien()
+    public function getTabelPasien()
     {
         return $this->hasOne(TabelPasien::className(), ['id_pasien' => 'id_pasien']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getTabelJenisKelamin()
+    {
+        return $this->hasOne(TabelJenisKelamin::className(), ['jenis_kelamin' => 'id_jenis_kelamin']);
     }
 }
