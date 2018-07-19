@@ -15,7 +15,6 @@ class TabelJenisPemeriksaanSearch extends TabelJenisPemeriksaan
     /**
      * {@inheritdoc}
      */
-    
     public function rules()
     {
         return [
