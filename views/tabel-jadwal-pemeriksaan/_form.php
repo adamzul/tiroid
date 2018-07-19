@@ -5,8 +5,8 @@ use yii\helpers\ArrayHelper;
 use yii\widgets\ActiveForm;
 use kartik\date\DatePicker;
 
-use app\Models\TabelPasien;
-use app\Models\TabelJenisPemeriksaan;
+use app\models\TabelPasien;
+use app\models\TabelJenisPemeriksaan;
 
 /* @var $this yii\web\View */
 /* @var $model app\Models\TabelJadwalPemeriksaan */

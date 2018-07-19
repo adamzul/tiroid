@@ -3,8 +3,8 @@
 namespace app\controllers;
 
 use Yii;
-use app\Models\TabelJenisPemeriksaan;
-use app\Models\TabelJenisPemeriksaanSearch;
+use app\models\TabelJenisPemeriksaan;
+use app\models\TabelJenisPemeriksaanSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;

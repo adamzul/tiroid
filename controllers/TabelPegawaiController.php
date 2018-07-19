@@ -3,7 +3,7 @@
 namespace app\controllers;
 
 use Yii;
-use app\Models\TabelPegawai;
+use app\models\TabelPegawai;
 use app\models\TabelPegawaiSearch;
 use app\models\UploadImage;
 use app\models\DownloadImage;

@@ -3,7 +3,7 @@
 namespace app\controllers;
 
 use Yii;
-use app\Models\TabelArtikel;
+use app\models\TabelArtikel;
 use app\models\TabelArtikelSearch;
 use app\models\UploadImage;
 use app\models\DownloadImage;
