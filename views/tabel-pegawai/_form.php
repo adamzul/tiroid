@@ -37,6 +37,8 @@ use app\models\TabelJenisKelamin;
     <?= $form->field($model, 'password_pegawai')->textInput(['maxlength' => true]) ?>
     
     <?= $form->field($model, 'id_role_pegawai')->dropDownList(ArrayHelper::map(TabelRole::find()->all(), 'id_role', 'role')) ?>
+    <?= $form->field($upload, 'imageFile')->fileInput()->label('Foto') ?>
+    
 
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>

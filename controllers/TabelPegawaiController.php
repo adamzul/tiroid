@@ -5,11 +5,18 @@ namespace app\controllers;
 use Yii;
 use app\Models\TabelPegawai;
 use app\models\TabelPegawaiSearch;
+use app\models\UploadImage;
+use app\models\DownloadImage;
+use app\models\DeleteImage;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 
+use Kunnu\Dropbox\Dropbox;
+use Kunnu\Dropbox\DropboxApp;
+
+use yii\web\UploadedFile;
 use app\connection_firebase\ConnectionFirebase;
 
 
@@ -19,6 +26,8 @@ use app\connection_firebase\ConnectionFirebase;
 class TabelPegawaiController extends Controller
 {
     public $connection;
+    public $defaultImage = 'default_doctor.jpg';
+    public $dropboxDirectory = 'employee';
 
     /**
      * @inheritdoc
@@ -80,19 +89,28 @@ class TabelPegawaiController extends Controller
     public function actionCreate()
     {
         $model = new TabelPegawai();
+        $nameImage = round(microtime(true) * 1000);
+        $upload = new UploadImage($this->dropboxDirectory, $nameImage);
 
         if ($model->load(Yii::$app->request->post()) ) {
             $model->password_pegawai = md5($model->password_pegawai);
+            $upload->imageFile = UploadedFile::getInstance($upload, 'imageFile');
+            if($upload->upload()){
+                $model->foto = $nameImage.'.'.$upload->imageFile->extension;
+            }
+            else{
+                $model->foto = $this->defaultImage;
+            }
             $model->save();
             if($model->id_role_pegawai == 1){
-                $this->connection->getChild($model->id_pegawai)->set(['name' => $model->nama_pegawai]);
+                $this->connection->getChild($model->id_pegawai)->set(['name' => $model->nama_pegawai, "image" => $model->foto]);
             }
             
 
             return $this->redirect(['view', 'id' => $model->id_pegawai]);
         } else {
             return $this->render('create', [
-                'model' => $model,
+                'model' => $model, 'upload' => $upload
             ]);
         }
     }
@@ -106,15 +124,25 @@ class TabelPegawaiController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        $nameImage = round(microtime(true) * 1000);
+        $upload = new UploadImage($this->dropboxDirectory, $nameImage);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            if($model->id_role_pegawai == 1){
-                $this->connection->getChild($model->id_pegawai)->set(['name' => $model->nama_pegawai]);
+        if ($model->load(Yii::$app->request->post())) {
+            $upload->imageFile = UploadedFile::getInstance($upload, 'imageFile');
+            if($upload->upload()){
+                (new DeleteImage($this->dropboxDirectory, $model->foto))->delete();
+
+                $model->foto = $nameImage.'.'.$upload->imageFile->extension;
             }
+            
+            if($model->id_role_pegawai == 1){
+                $this->connection->getChild($model->id_pegawai)->set(['name' => $model->nama_pegawai, "image" => $model->foto]);
+            }
+            $model->save();
             return $this->redirect(['view', 'id' => $model->id_pegawai]);
         } else {
             return $this->render('update', [
-                'model' => $model,
+                'model' => $model, 'upload' => $upload
             ]);
         }
     }
@@ -127,7 +155,13 @@ class TabelPegawaiController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $model = $this->findModel($id);
+        if($model->id_role_pegawai == 1){
+            $this->connection->getChild($model->id_pegawai)->remove();
+        }
+        (new DeleteImage($this->dropboxDirectory, $model->foto))->delete();
+
+        $model->delete();
 
         return $this->redirect(['index']);
     }

@@ -38,7 +38,7 @@ class UploadImage extends model{
 			// $this->imageFile->saveAs($this->directory.$this->newImageName.'.'.$this->imageFile->extension);
 			echo "tidak null";
 			$dropboxFile = new DropboxFile($this->imageFile->tempName);
-			$file = $this->dropbox->upload($dropboxFile, '/'.$this->newImageName.'.'.$this->imageFile->extension, ['autorename' => true]);
+			$file = $this->dropbox->upload($dropboxFile, '/'.$this->directory.'/'.$this->newImageName.'.'.$this->imageFile->extension, ['autorename' => true]);
 			// var_dump($file->getName());
 			return true;
 		}

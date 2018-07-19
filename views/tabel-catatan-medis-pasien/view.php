@@ -11,29 +11,33 @@ $this->params['breadcrumbs'][] = ['label' => 'Tabel Catatan Medis Pasiens', 'url
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="tabel-catatan-medis-pasien-view">
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title"><?= Html::encode($this->title) ?></h3>
+        </div>
+        <div class="panel-body">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+            <p>
+                <?= Html::a('Update', ['update', 'id' => $model->id_catatan_medis_pasien], ['class' => 'btn btn-primary']) ?>
+                <?= Html::a('Delete', ['delete', 'id' => $model->id_catatan_medis_pasien], [
+                    'class' => 'btn btn-danger',
+                    'data' => [
+                        'confirm' => 'Are you sure you want to delete this item?',
+                        'method' => 'post',
+                    ],
+                ]) ?>
+            </p>
 
-    <p>
-        <?= Html::a('Update', ['update', 'id' => $model->id_catatan_medis_pasien], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Delete', ['delete', 'id' => $model->id_catatan_medis_pasien], [
-            'class' => 'btn btn-danger',
-            'data' => [
-                'confirm' => 'Are you sure you want to delete this item?',
-                'method' => 'post',
-            ],
-        ]) ?>
-    </p>
-
-    <?= DetailView::widget([
-        'model' => $model,
-        'attributes' => [
-            'id_catatan_medis_pasien',
-            'id_penyakit',
-            'id_pasien',
-            'id_pegawai',
-            'catatan:ntext',
-        ],
-    ]) ?>
-
+            <?= DetailView::widget([
+                'model' => $model,
+                'attributes' => [
+                    'id_catatan_medis_pasien',
+                    'id_penyakit',
+                    'id_pasien',
+                    'id_pegawai',
+                    'catatan:ntext',
+                ],
+            ]) ?>
+        </div>
+    </div>
 </div>

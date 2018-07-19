@@ -108,8 +108,17 @@ class TabelPasienController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        $passwordHash = $model->password_pasien;
+        if ($model->load(Yii::$app->request->post())) {
+            $userProperties = [
+                'email' => $model->email_pasien,
+            ];
+            if($passwordHash != $model->password_pasien){
+                $userProperties['password'] = $model->password_pasien;
+                $model->password_pasien = md5($model->password_pasien);
+            }
+            $upadateUser = $this->auth->updateUser($model->id_firebase, $userProperties);
+            $model->save();
             return $this->redirect(['view', 'id' => $model->id_pasien]);
         } else {
             return $this->render('update', [

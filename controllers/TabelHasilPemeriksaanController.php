@@ -7,6 +7,7 @@ use app\models\TabelHasilPemeriksaan;
 use app\models\TabelHasilPemeriksaanSearch;
 use app\models\UploadImage;
 use app\models\DownloadImage;
+use app\models\DeleteImage;
 use app\models\TabelPasien;
 use app\models\TabelJenisPemeriksaan;
 
@@ -27,6 +28,8 @@ use app\connection_firebase\ConnectionFirebase;
 class TabelHasilPemeriksaanController extends Controller
 {
     public $connection;
+    public $defaultImage = 'default_checkup_result.jpg';
+    public $dropboxDirectory = 'checkup_result';
     /**
      * @inheritdoc
      */
@@ -90,7 +93,7 @@ class TabelHasilPemeriksaanController extends Controller
         $directory = "../upload/hasil_pemeriksaan/";
         $nameImage = round(microtime(true) * 1000);
         $model = new TabelHasilPemeriksaan();
-        $upload = new UploadImage($directory, $nameImage);
+        $upload = new UploadImage($this->dropboxDirectory, $nameImage);
         // $storage = (new ConnectionFirebase())->storageRef;
         // $image = $storage->getChild
 
@@ -98,11 +101,13 @@ class TabelHasilPemeriksaanController extends Controller
             $upload->imageFile = UploadedFile::getInstance($upload, 'imageFile');
             if($upload->upload()){
                 $model->foto = $nameImage.'.'.$upload->imageFile->extension;
-            
-                $model->save();
-                $this->saveToFirebase($model);
-                return $this->redirect(['view', 'id' => $model->id_hasil_pemeriksaan]);         
             }
+            else{
+                $model->foto = $this->defaultImage;
+            }
+            $model->save();
+            $this->saveToFirebase($model);
+            return $this->redirect(['view', 'id' => $model->id_hasil_pemeriksaan]);
         } else {
             return $this->render('create', [
                 'model' => $model, 'upload' => $upload
@@ -121,14 +126,15 @@ class TabelHasilPemeriksaanController extends Controller
         $model = $this->findModel($id);
         $directory = "../upload/hasil_pemeriksaan/";
         $nameImage = round(microtime(true) * 1000);
-        $upload = new UploadImage($directory, $nameImage);
+        $upload = new UploadImage($this->dropboxDirectory, $nameImage);
 
         if ($model->load(Yii::$app->request->post())) {
             $upload->imageFile = UploadedFile::getInstance($upload, 'imageFile');
-
             if($upload->upload()){
+                (new DeleteImage($this->dropboxDirectory, $model->foto))->delete();
                 $model->foto = $nameImage.'.'.$upload->imageFile->extension;
             }
+            
             $model->save();
             $this->saveToFirebase($model);
             return $this->redirect(['view', 'id' => $model->id_hasil_pemeriksaan]);
@@ -148,10 +154,11 @@ class TabelHasilPemeriksaanController extends Controller
     public function actionDelete($id)
     {
         $model = $this->findModel($id);
-        $jenisPemeriksaan = TabelJenisPemeriksaan::findOne($model->id_jenis_pemeriksaan_pasien);
         $pasien = TabelPasien::findOne($model->id_pasien);
-        $newPost = $this->connection->getChild($pasien->id_firebase.'/'.$model->id_hasil_pemeriksaan)->remove();
+        $this->connection->getChild($pasien->id_firebase.'/'.$model->id_hasil_pemeriksaan)->remove();
         $model->delete();
+        (new DeleteImage($this->dropboxDirectory, $model->foto))->delete();
+
         return $this->redirect(['index']);
     }
 

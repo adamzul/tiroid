@@ -13,8 +13,12 @@ use app\models\TabelPegawai;
 $this->title = 'Tabel Appointments';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-
-<table id="example" class="table table-striped table-bordered" style="width:100%">
+<div class="panel panel-primary">
+  <div class="panel-heading">
+    <h3 class="panel-title"><?= Html::encode($this->title) ?></h3>
+  </div>
+  <div class="panel-body">
+  <table id="example" class="table table-striped table-bordered" style="width:100%">
     <thead>
         <tr>
             <th>Pasien</th>
@@ -56,6 +60,10 @@ $this->params['breadcrumbs'][] = $this->title;
     ?>
     </tbody>
 </table>
+  </div>
+</div>
+
+
 
  <?php
  AppointmentAsset::register($this);

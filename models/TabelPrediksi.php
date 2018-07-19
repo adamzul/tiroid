@@ -84,6 +84,7 @@ class TabelPrediksi extends \yii\db\ActiveRecord
      */
     public function getTabelJenisKelamin()
     {
-        return $this->hasOne(TabelJenisKelamin::className(), ['jenis_kelamin' => 'id_jenis_kelamin']);
+        return $this->hasOne(TabelJenisKelamin::className(), ['id_jenis_kelamin' => 'jenis_kelamin']);
     }
+    
 }

@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\DetailView;
+use app\models\DownloadImage;
 
 /* @var $this yii\web\View */
 /* @var $model app\Models\TabelPegawai */
@@ -30,12 +31,26 @@ $this->params['breadcrumbs'][] = $this->title;
         'attributes' => [
             'id_pegawai',
             'nama_pegawai',
-            'id_jenis_kelamin_pegawai',
+            'tabelJenisKelamin.jenis_kelamin',
             'tanggal_lahir_pegawai',
             'alamat_pegawai',
             'no_telpon_pegawai',
             'username_pegawai',
-            'password_pegawai',
+            'tabelRole.role',
+            array(
+                'attribute' => 'foto',
+                'format' => ['image', ['width' => '100', 'height' => '100']],
+                'value' => function($data){
+                    if($data->foto == null){
+                        return;
+                    }
+                    $downloadImage = new DownloadImage('employee', $data->foto);
+                    return $downloadImage->download();
+                    // $url = Url::to('@web').'/../upload/hasil_pemeriksaan/'.$data->foto;
+                    // // var_dump($url);
+                    // return Html::img($url, ['alt'=>'myImage','width'=>'700','height'=>'500']);
+                }
+            ),
         ],
     ]) ?>
 

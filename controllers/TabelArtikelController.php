@@ -5,11 +5,18 @@ namespace app\controllers;
 use Yii;
 use app\Models\TabelArtikel;
 use app\models\TabelArtikelSearch;
+use app\models\UploadImage;
+use app\models\DownloadImage;
+use app\models\DeleteImage;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 
+use Kunnu\Dropbox\Dropbox;
+use Kunnu\Dropbox\DropboxApp;
+
+use yii\web\UploadedFile;
 use app\connection_firebase\ConnectionFirebase;
 use app\decision_tree\DecisionTree;
 /**
@@ -19,6 +26,9 @@ class TabelArtikelController extends Controller
 {
 
     public $connection;
+    public $defaultImage = 'default_article.png';
+    public $dropboxDirectory = 'article';
+
     /**
      * @inheritdoc
      */
@@ -80,13 +90,23 @@ class TabelArtikelController extends Controller
     {
         $model = new TabelArtikel();
         $model->id_pegawai = Yii::$app->user->identity->id_pegawai;
+        $nameImage = round(microtime(true) * 1000);
+        $upload = new UploadImage($this->dropboxDirectory, $nameImage);
         
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post())) {
             $transaction = Yii::$app->db->beginTransaction();
             try {
-                
+                $upload->imageFile = UploadedFile::getInstance($upload, 'imageFile');
+                if($upload->upload()){
+                    // return 0;
+                    $model->foto = $nameImage.'.'.$upload->imageFile->extension;
+                }
+                else{
+                    $model->foto = $this->defaultImage;
+                }
+                $model->save();
                 $newPost = $this->connection->getChild($model->id_artikel)
-                ->set(["contentTitle" => $model->judul_artikel, "content" => $model->konten_artikel]);
+                ->set(["contentTitle" => $model->judul_artikel, "content" => $model->konten_artikel, "image" => $model->foto]);
                 $transaction->commit();  
             }
             catch(Exception $e){
@@ -101,7 +121,7 @@ class TabelArtikelController extends Controller
 
         } else {
             return $this->render('create', [
-                'model' => $model,
+                'model' => $model, 'upload' => $upload
             ]);
         }
     }
@@ -116,24 +136,33 @@ class TabelArtikelController extends Controller
     {
         $model = $this->findModel($id);
         $post = $this->connection->getChild($id)->getValue();
+        $nameImage = round(microtime(true) * 1000);
+        $upload = new UploadImage($this->dropboxDirectory, $nameImage);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post())) {
             try {
-                
+                $upload->imageFile = UploadedFile::getInstance($upload, 'imageFile');
+                if($upload->upload()){
+                    if($model->foto != $defaultImage){
+                        (new DeleteImage($this->dropboxDirectory, $model->foto))->delete();
+                    }
+                    $model->foto = $nameImage.'.'.$upload->imageFile->extension;
+                }
+                $model->save();
                 $newPost = $this->connection->getChild($model->id_artikel)
-                ->set(["contentTitle" => $model->judul_artikel, "content" => $model->konten_artikel]);  
+                ->set(["contentTitle" => $model->judul_artikel, "content" => $model->konten_artikel, "image" => $model->foto]);  
             }
             catch(Exception $e){
                 $transaction->rollback();
                 return $this->render('create', [
-                'model' => $model,
+                'model' => $model, 
             ]);
         
             }
             return $this->redirect(['view', 'id' => $model->id_artikel]);
         } else {
             return $this->render('update', [
-                'model' => $model,
+                'model' => $model, 'upload' => $upload
             ]);
         }
     }
@@ -146,9 +175,12 @@ class TabelArtikelController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $model = $this->findModel($id);
+        if($model->foto != $defaultImage){
+            (new DeleteImage($this->dropboxDirectory, $model->foto))->delete();
+        }
         $this->connection->getChild($id)->remove();
-
+        $model->delete();
         return $this->redirect(['index']);
     }
 

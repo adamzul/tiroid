@@ -24,8 +24,7 @@ use app\models\TabelJenisPemeriksaan;
 
     <?= $form->field($model, 'hasil_pemeriksaan')->textarea(['rows' => 6]) ?>
 
-    <?= $form->field($upload, 'imageFile')->fileInput()->label('Foto')
-     ?>
+    <?= $form->field($upload, 'imageFile')->fileInput()->label('Foto') ?>
 
     <?= $form->field($model, 'tanggal_pemeriksaan')->widget(DatePicker::classname(),[
         'name' => 'date',

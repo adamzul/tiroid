@@ -7,16 +7,17 @@ use yii\widgets\Pjax;
 /* @var $searchModel app\models\TabelCatatanMedisPasienSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Tabel Catatan Medis Pasiens';
+$this->title = 'Tabel Catatan Medis Pasien';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="tabel-catatan-medis-pasien-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-
-    <p>
-        <?= Html::a('Create Tabel Catatan Medis Pasien', ['create'], ['class' => 'btn btn-success']) ?>
+<div class="panel panel-primary">
+  <div class="panel-heading">
+    <h3 class="panel-title"><?= Html::encode($this->title) ?></h3>
+  </div>
+  <div class="panel-body">
+  <p>
+        <?= Html::a('Tambah Catatan Medis Pasien', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 <?php Pjax::begin(); ?>    <?= GridView::widget([
         'dataProvider' => $dataProvider,
@@ -40,4 +41,11 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\ActionColumn'],
         ],
     ]); ?>
-<?php Pjax::end(); ?></div>
+<?php Pjax::end(); ?>
+  </div>
+</div>
+<div class="tabel-catatan-medis-pasien-index">
+
+    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+
+    </div>

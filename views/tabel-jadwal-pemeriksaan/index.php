@@ -7,17 +7,20 @@ use yii\widgets\Pjax;
 /* @var $searchModel app\Models\TabelJadwalPemeriksaanSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Tabel Jadwal Pemeriksaans';
+$this->title = 'Tabel Jadwal Pemeriksaan';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="tabel-jadwal-pemeriksaan-index">
-
-    <h1><?= Html::encode($this->title) ?></h1>
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title"><?= Html::encode($this->title) ?></h3>
+        </div>
+        <div class="panel-body">
     <?php Pjax::begin(); ?>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a('Create Tabel Jadwal Pemeriksaan', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Tambah Jadwal Pemeriksaan', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?= GridView::widget([
@@ -45,4 +48,6 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
     ]); ?>
     <?php Pjax::end(); ?>
+        </div>
+    </div>
 </div>

@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use Yii;
 use app\models\TabelPrediksi;
+use app\models\TabelPasien;
 use app\models\TabelPrediksiSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -16,6 +17,7 @@ use app\connection_firebase\ConnectionFirebase;
  */
 class TabelPrediksiController extends Controller
 {
+    public $connection;
     /**
      * {@inheritdoc}
      */
@@ -31,10 +33,10 @@ class TabelPrediksiController extends Controller
         ];
     }
 
-    // public function beforeAction($event){
-    //     $this->connection = (new ConnectionFirebase('checkUpResult'))->reference;
-    //     return parent::beforeAction($event);
-    // }
+     public function beforeAction($event){
+         $this->connection = (new ConnectionFirebase('diagnose'))->reference;
+         return parent::beforeAction($event);
+     }
 
     /**
      * Lists all TabelPrediksi models.
@@ -75,8 +77,8 @@ class TabelPrediksiController extends Controller
 
         if ($model->load(Yii::$app->request->post())) {
             $model->hasil_prediksi = (new Prediksi())->getPrediksi($model);
-
             $model->save(false);
+            $this->saveToFirebase($model);
             return $this->redirect(['view', 'id' => $model->id_prediksi]);
         }
 
@@ -99,6 +101,7 @@ class TabelPrediksiController extends Controller
         if ($model->load(Yii::$app->request->post())) {
             $model->hasil_prediksi = (new Prediksi())->getPrediksi($model);
             $model->save(false);
+            $this->saveToFirebase($model);
             return $this->redirect(['view', 'id' => $model->id_prediksi]);
         }
 
@@ -116,8 +119,10 @@ class TabelPrediksiController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
-
+        $model = $this->findModel($id);
+        $pasien = TabelPasien::findOne($model->id_pasien);
+        $this->connection->getChild($pasien->id_firebase.'/'.$model->id_prediksi)->remove();
+        $model->delete();
         return $this->redirect(['index']);
     }
 
@@ -137,10 +142,12 @@ class TabelPrediksiController extends Controller
         throw new NotFoundHttpException('The requested page does not exist.');
     }
 
-    private function saveToFirebase($model){
-        $jenisPemeriksaan = TabelJenisPemeriksaan::findOne($model->id_jenis_pemeriksaan_pasien);
+    private function saveToFirebase(TabelPrediksi $model){
         $pasien = TabelPasien::findOne($model->id_pasien);
-        $newPost = $this->connection->getChild($pasien->id_firebase.'/'.$model->id_prediksi)
-            ->set(["name" => $pasien->nama_pasien, "gender" => $model->jenis_kelamin, "age" => $model->tanggal_pemeriksaan, "image" => $model->foto]); 
+        $this->connection->getChild($pasien->id_firebase.'/'.$model->id_prediksi)
+            ->set(["name" => $pasien->nama_pasien, "gender" => $model->jenis_kelamin,
+                "age" => $model->usia, "thyroidHistory" => $model->riwayat_penyakit_tiroid, 
+                "diastolicPulse" => $model->tekanan_diastolik, "sistolicPulse" => $model->tekanan_sistolik,
+                "TSH" => $model->TSH, "T4" => $model->T4, "date" => $model->tanggal_input, "prediction" => $model->hasil_prediksi]); 
     }
 }

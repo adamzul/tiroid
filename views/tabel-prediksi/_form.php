@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
+use kartik\date\DatePicker;
 use yii\widgets\ActiveForm;
 use app\models\TabelPasien;
 use app\models\TabelJenisKelamin;
@@ -32,6 +33,11 @@ use app\models\TabelJenisKelamin;
     <?= $form->field($model, 'TSH')->textInput() ?>
 
     <?= $form->field($model, 'T4')->textInput() ?>
+    <?= $form->field($model, 'tanggal_input')->widget(DatePicker::classname(),[
+        'name' => 'date',
+        'pluginOptions' => ['format' => 'yyyy-mm-dd', 'autoclose' => true]
+
+    ]) ?>
 
     <?= $form->field($model, 'catatan_dokter')->textarea(['rows' => 6]) ?>
 

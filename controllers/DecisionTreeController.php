@@ -10,7 +10,6 @@ use yii\filters\VerbFilter;
 use app\models\TabelRule;
 use app\models\TabelDataset;
 
-
 class DecisionTreeController extends \yii\web\Controller
 {
 	/**

@@ -9,7 +9,7 @@ use Kunnu\Dropbox\Dropbox;
 use Kunnu\Dropbox\DropboxApp;
 use Kunnu\Dropbox\DropboxFile;
 
-class DownloadImage {
+class DeleteImage {
 
 	public $imageFile;
 	private $imageName, $dropbox;
@@ -21,13 +21,8 @@ class DownloadImage {
 		$this->dropbox = new Dropbox($app);
 	}
 
-	public function download(){
-		$file = $this->dropbox->download('/'.$this->directoryPath.'/'.$this->imageName);
-		$metadata = $file->getMetadata();
-		$metadata->getName();
-		// file_put_contents(__DIR__ . "/wew.jpg", $file->getContents());
-		$base64 = "data:image/" . "jpg" . ";base64," . base64_encode($file->getContents());
-		// var_dump($file->getContents());
-		return $base64;
+	public function delete(){
+		$file = $this->dropbox->delete('/'.$this->directoryPath.'/'.$this->imageName);
+		return $file;
 	}
 }

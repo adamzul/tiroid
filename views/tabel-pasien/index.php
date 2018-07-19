@@ -7,16 +7,19 @@ use yii\widgets\Pjax;
 /* @var $searchModel app\Models\TabelPasienSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Tabel Pasiens';
+$this->title = 'Tabel Pasien';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="tabel-pasien-index">
-
-    <h1><?= Html::encode($this->title) ?></h1>
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title"><?= Html::encode($this->title) ?></h3>
+        </div>
+        <div class="panel-body">
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a('Create Tabel Pasien', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Tambah Pasien', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 <?php Pjax::begin(); ?>    <?= GridView::widget([
         'dataProvider' => $dataProvider,
@@ -39,4 +42,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\ActionColumn'],
         ],
     ]); ?>
-<?php Pjax::end(); ?></div>
+<?php Pjax::end(); ?>
+        </div>
+    </div>
+</div>

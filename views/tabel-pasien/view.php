@@ -12,7 +12,7 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="tabel-pasien-view">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+    <h1><?= Html::encode($model->nama_pasien) ?></h1>
 
     <p>
         <?= Html::a('Update', ['update', 'id' => $model->id_pasien], ['class' => 'btn btn-primary']) ?>
@@ -30,7 +30,10 @@ $this->params['breadcrumbs'][] = $this->title;
         'attributes' => [
             'id_pasien',
             'nama_pasien',
-            'id_jenis_kelamin_pasien',
+            [
+                'attribute' => 'jenis_kelamin',
+                'value' => 'tabelJenisKelamin.jenis_kelamin'
+            ],
             'tanggal_lahir',
             'alamat',
             'email_pasien',

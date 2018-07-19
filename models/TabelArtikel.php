@@ -1,7 +1,7 @@
 <?php
 
 namespace app\models;
-
+ 
 use Yii;
 
 /**
@@ -36,6 +36,7 @@ class TabelArtikel extends \yii\db\ActiveRecord
             [['judul_artikel'], 'required'],
             [['konten_artikel'], 'string'],
             [['tanggal_artikel'], 'safe'],
+            [['foto'], 'string', 'max' => 30],
             [['judul_artikel'], 'string', 'max' => 50],
             [['sumber_artikel'], 'string', 'max' => 30],
             [['id_pegawai'], 'exist', 'skipOnError' => true, 'targetClass' => TabelPegawai::className(), 'targetAttribute' => ['id_pegawai' => 'id_pegawai']],
@@ -54,6 +55,7 @@ class TabelArtikel extends \yii\db\ActiveRecord
             'konten_artikel' => 'Konten Artikel',
             'tanggal_artikel' => 'Tanggal Artikel',
             'sumber_artikel' => 'Sumber Artikel',
+            'foto' => 'Foto'
         ];
     }
 

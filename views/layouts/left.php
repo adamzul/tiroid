@@ -5,7 +5,7 @@
         <!-- Sidebar user panel -->
         <div class="user-panel">
             <div class="pull-left image">
-                <img src="<?= $directoryAsset ?>/img/user2-160x160.jpg" class="img-circle" alt="User Image"/>
+                <img src="/image/dokter1.png" class="img-circle" alt="User Image"/>
             </div>
             <div class="pull-left info">
                 <p>
@@ -36,10 +36,11 @@
                     ['label' => 'appointment',  'url' => ['/tabel-appointment']],
                     ['label' => 'artikel',  'url' => ['/tabel-artikel']],
                     ['label' => 'catatan medis pasien',  'url' => ['/tabel-catatan-medis-pasien']],
+                    ['label' => 'jenis pemeriksaan',  'url' => ['/tabel-jenis-pemeriksaan']],
                     ['label' => 'hasil pemeriksaan',  'url' => ['/tabel-hasil-pemeriksaan']],
                     ['label' => 'jadwal',  'url' => ['/tabel-jadwal']],
                     ['label' => 'jadwal pemeriksaan',  'url' => ['/tabel-jadwal-pemeriksaan']],
-                    ['label' => 'notifikasi',  'url' => ['/tabel-notifikasi']],
+                    // ['label' => 'notifikasi',  'url' => ['/tabel-notifikasi']],
                     ['label' => 'pasien',  'url' => ['/tabel-pasien']],
                     ['label' => 'pegawai',  'url' => ['/tabel-pegawai']],
                     ['label' => 'penyakit',  'url' => ['/tabel-penyakit']],

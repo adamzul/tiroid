@@ -11,7 +11,7 @@ use kartik\date\DatePicker;
 
 <div class="tabel-artikel-form">
 
-    <?php $form = ActiveForm::begin(); ?>
+    <?php $form = ActiveForm::begin(); ?> 
 
 
     <?= $form->field($model, 'judul_artikel')->textInput(['maxlength' => true]) ?>
@@ -29,9 +29,11 @@ use kartik\date\DatePicker;
     
 
     <?= $form->field($model, 'sumber_artikel')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($upload, 'imageFile')->fileInput()->label('Foto') ?>
+    
 
     <div class="form-group">
-        <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+        <?= Html::submitButton($model->isNewRecord ? 'Tambah' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

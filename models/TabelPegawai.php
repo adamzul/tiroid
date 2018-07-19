@@ -44,6 +44,7 @@ class TabelPegawai extends \yii\db\ActiveRecord
             [['id_role_pegawai'], 'required'],
             [['id_role_pegawai'], 'integer'],
             [['tanggal_lahir_pegawai'], 'safe'],
+            [['foto'], 'string', 'max' => 30],
             [['nama_pegawai', 'username_pegawai'], 'string', 'max' => 30],
             [['id_jenis_kelamin_pegawai'], 'string', 'max' => 1],
             [['alamat_pegawai'], 'string', 'max' => 50],

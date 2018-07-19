@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\DetailView;
+use app\models\DownloadImage;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\TabelHasilPemeriksaan */
@@ -29,11 +30,23 @@ $this->params['breadcrumbs'][] = $this->title;
         'model' => $model,
         'attributes' => [
             'id_hasil_pemeriksaan',
-            'id_pasien',
-            'id_pegawai',
+            'tabelPasien.nama_pasien',
             'hasil_pemeriksaan:ntext',
-            'foto',
             'tanggal_pemeriksaan',
+            array(
+                'attribute' => 'foto',
+                'format' => ['image', ['width' => '100', 'height' => '100']],
+                'value' => function($data){
+                    if($data->foto == null){
+                        return;
+                    }
+                    $downloadImage = new DownloadImage('checkup_result', $data->foto);
+                    return $downloadImage->download();
+                    // $url = Url::to('@web').'/../upload/hasil_pemeriksaan/'.$data->foto;
+                    // // var_dump($url);
+                    // return Html::img($url, ['alt'=>'myImage','width'=>'700','height'=>'500']);
+                }
+            ),
         ],
     ]) ?>
 
