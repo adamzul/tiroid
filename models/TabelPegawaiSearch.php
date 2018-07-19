@@ -5,7 +5,7 @@ namespace app\models;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\Models\TabelPegawai;
+use app\models\TabelPegawai;
 
 /**
  * TabelPegawaiSearch represents the model behind the search form about `app\Models\TabelPegawai`.

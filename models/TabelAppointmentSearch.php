@@ -5,7 +5,7 @@ namespace app\models;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\Models\TabelAppointment;
+use app\models\TabelAppointment;
 
 /**
  * TabelAppointmentSearch represents the model behind the search form about `app\Models\TabelAppointment`.

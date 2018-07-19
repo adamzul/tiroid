@@ -5,7 +5,7 @@ namespace app\Models;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\Models\TabelJadwalPemeriksaan;
+use app\models\TabelJadwalPemeriksaan;
 
 /**
  * TabelJadwalPemeriksaanSearch represents the model behind the search form of `app\Models\TabelJadwalPemeriksaan`.
