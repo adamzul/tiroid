@@ -119,6 +119,14 @@ class TabelAppointmentController extends Controller
 
     public function actionKonfirmasi($idPasien){
         $this->connection->getChild($idPasien)->getChild('confirmation')->set(true);
+        $appointmentApproved = $this->connection->getChild($idPasien);
+        $appointmentList = $this->connection->getValue();
+        foreach ($appointmentList as $key => $appointment) {
+            # code...
+            if(($appointment['confirmation'] == null && $appointment['idDoctor'] == $appointmentApproved['idDoctor'] && $appointment['date'] == $appointmentApproved['date'] ) && $key != $idPasien){
+                $this->connection->getChild($key)->remove();
+            }
+        }
         return $this->redirect(['index']);
     }
 
