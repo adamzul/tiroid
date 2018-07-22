@@ -8,6 +8,7 @@ use app\models\TabelAppointmentSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\filters\AccessControl;
 use app\connection_firebase\ConnectionFirebase;
 
 
@@ -30,6 +31,18 @@ class TabelAppointmentController extends Controller
                     'delete' => ['POST'],
                 ],
             ],
+            'access' => [
+                'class' => AccessControl::className(),
+                'rules' => [['actions' => ['index', 'create', 'update', 'delete', 'view',],'allow' => true,'roles' => ['@'],
+                            'matchCallback'=>function(){
+                                return (
+                                    Yii::$app->user->identity->id_role_pegawai=='2'
+                                );
+                            }],
+
+                ]
+            ],
+        
         ];
     }
     public function beforeAction($event){

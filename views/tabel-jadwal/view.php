@@ -11,9 +11,11 @@ $this->params['breadcrumbs'][] = ['label' => 'Tabel Jadwals', 'url' => ['index']
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="tabel-jadwal-view">
-
-    <h1><?= Html::encode($this->title) ?></h1>
-
+  <div class="panel panel-primary">
+    <div class="panel-heading">
+      <h3 class="panel-title"><?= Html::encode($this->title) ?></h3>
+    </div>
+    <div class="panel-body">
     <p>
         <?= Html::a('Update', ['update', 'id' => $model->id_jadwal_dokter], ['class' => 'btn btn-primary']) ?>
         <?= Html::a('Delete', ['delete', 'id' => $model->id_jadwal_dokter], [
@@ -36,5 +38,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'ruang',
         ],
     ]) ?>
+    </div>
+  </div>
 
 </div>

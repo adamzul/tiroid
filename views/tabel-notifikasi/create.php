@@ -11,11 +11,13 @@ $this->params['breadcrumbs'][] = ['label' => 'Tabel Notifikasis', 'url' => ['ind
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="tabel-notifikasi-create">
-
-    <h1><?= Html::encode($this->title) ?></h1>
-
+	<div class="panel panel-primary">
+    <div class="panel-heading">
+      <h3 class="panel-title"><?= Html::encode($this->title) ?></h3>
+    </div>
     <?= $this->render('_form', [
         'model' => $model,
     ]) ?>
-
+    </div>
+  </div>
 </div>

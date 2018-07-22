@@ -6,6 +6,7 @@ use Yii;
 use app\models\TabelPrediksi;
 use app\models\TabelPasien;
 use app\models\TabelPrediksiSearch;
+use app\models\TabelJenisKelamin;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -144,8 +145,9 @@ class TabelPrediksiController extends Controller
 
     private function saveToFirebase(TabelPrediksi $model){
         $pasien = TabelPasien::findOne($model->id_pasien);
+        $jenisKelamin = TabelJenisKelamin::findOne($model->jenisKelamin);
         $this->connection->getChild($pasien->id_firebase.'/'.$model->id_prediksi)
-            ->set(["name" => $pasien->nama_pasien, "gender" => $model->jenis_kelamin,
+            ->set(["name" => $pasien->nama_pasien, "gender" => $jenisKelamin->jenis_kelamin,
                 "age" => $model->usia, "thyroidHistory" => $model->riwayat_penyakit_tiroid, 
                 "diastolicPulse" => $model->tekanan_diastolik, "sistolicPulse" => $model->tekanan_sistolik,
                 "TSH" => $model->TSH, "T4" => $model->T4, "date" => $model->tanggal_input, "prediction" => $model->hasil_prediksi]); 

@@ -43,7 +43,13 @@ class TabelArtikelController extends Controller
             ],
             'access' => [
                 'class' => AccessControl::className(),
-                'rules' => [['actions' => ['index', 'create', 'update', 'delete', 'view',],'allow' => true,'roles' => ['@']],
+                'rules' => [['actions' => ['index', 'create', 'update', 'delete', 'view',],'allow' => true,'roles' => ['@'],
+                            'matchCallback'=>function(){
+                                return (
+                                    Yii::$app->user->identity->id_role_pegawai=='2'
+                                );
+                            }],
+
                 ]
             ],
         ];

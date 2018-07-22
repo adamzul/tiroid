@@ -12,8 +12,12 @@ $this->params['breadcrumbs'][] = ['label' => 'Tabel Hasil Pemeriksaans', 'url' =
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="tabel-hasil-pemeriksaan-view">
+  <div class="panel panel-primary">
+    <div class="panel-heading">
+      <h3 class="panel-title"><?= Html::encode($this->title) ?></h3>
+    </div>
+    <div class="panel-body">
 
-    <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
         <?= Html::a('Update', ['update', 'id' => $model->id_hasil_pemeriksaan], ['class' => 'btn btn-primary']) ?>
@@ -49,5 +53,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ),
         ],
     ]) ?>
+    </div>
+  </div>
 
 </div>
