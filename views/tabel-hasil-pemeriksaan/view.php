@@ -7,7 +7,7 @@ use app\models\DownloadImage;
 /* @var $this yii\web\View */
 /* @var $model app\models\TabelHasilPemeriksaan */
 
-$this->title = $model->id_hasil_pemeriksaan." - ".;
+$this->title = $model->id_hasil_pemeriksaan." - ".$model->tabelPasien->nama_pasien;
 $this->params['breadcrumbs'][] = ['label' => 'Tabel Hasil Pemeriksaans', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
