@@ -6,7 +6,7 @@ use yii\grid\GridView;
 use yii\widgets\Pjax;
 use app\assets\IndexAsset;
 
-
+$this->title = '';
 ?>
 <!-- <div class="site-index"> -->
 

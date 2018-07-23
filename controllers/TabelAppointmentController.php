@@ -33,7 +33,7 @@ class TabelAppointmentController extends Controller
             ],
             'access' => [
                 'class' => AccessControl::className(),
-                'rules' => [['actions' => ['index', 'create', 'update', 'delete', 'view', 'konfirmasi'],'allow' => true,'roles' => ['@'],
+                'rules' => [['actions' => ['index', 'create', 'update', 'delete', 'view', 'konfirmasi', 'tolak', 'hapus'],'allow' => true,'roles' => ['@'],
                             'matchCallback'=>function(){
                                 return (
                                     Yii::$app->user->identity->id_role_pegawai=='2'
@@ -148,6 +148,16 @@ class TabelAppointmentController extends Controller
                 $this->connection->getChild($key)->getChild("approved")->set(false);
             }
         }
+        return $this->redirect(['index']);
+    }
+
+    public function actionTolak($idPasien){
+        $this->connection->getChild($idPasien)->getChild("approved")->set(false);
+        return $this->redirect(['index']);
+    }
+
+    public function actionHapus($idPasien){
+        $this->connection->getChild($idPasien)->remove();
         return $this->redirect(['index']);
     }
 

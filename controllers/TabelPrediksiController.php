@@ -84,7 +84,7 @@ class TabelPrediksiController extends Controller
                 : (date("Y") - $birthDate[0]));
             $model->hasil_prediksi = (new Prediksi())->getPrediksi($model);
             $jenisKelamin = TabelJenisKelamin::findOne($pasien->id_jenis_kelamin_pasien);
-            $model->jenis_kelamin =$jenisKelamin->jenis_kelamin;
+            $model->jenis_kelamin = $jenisKelamin->jenis_kelamin;
             $model->save(false);
             $this->saveToFirebase($model);
             return $this->redirect(['view', 'id' => $model->id_prediksi]);

@@ -43,6 +43,9 @@ class TabelJadwalSearch extends TabelJadwal
     public function search($params)
     {
         $query = TabelJadwal::find();
+        if(Yii::$app->user->identity->id_role_pegawai == 1){
+            $query = TabelJadwal::find()->where(['id_pegawai' => Yii::$app->user->identity->id_pegawai]);
+        }
         $query->joinWith(['tabelPegawai', 'tabelHari']);
 
         // add conditions that should always apply here

@@ -86,5 +86,7 @@ class TabelPrediksi extends \yii\db\ActiveRecord
     {
         return $this->hasOne(TabelJenisKelamin::className(), ['id_jenis_kelamin' => 'jenis_kelamin']);
     }
+
+    
     
 }

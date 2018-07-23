@@ -27,25 +27,33 @@
             </div>
         </form> -->
         <!-- /.search form -->
-
-        <?= dmstr\widgets\Menu::widget(
-            [
-                'options' => ['class' => 'sidebar-menu'],
-                'items' => [
-                    ['label' => 'Menu', 'options' => ['class' => 'header']],
+        <?php 
+        $items = [['label' => 'Menu', 'options' => ['class' => 'header']],
+                    ['label' => 'jadwal',  'url' => ['/tabel-jadwal']],
+                    ['label' => 'hasil pemeriksaan',  'url' => ['/tabel-hasil-pemeriksaan']],
                     ['label' => 'appointment',  'url' => ['/tabel-appointment']],
                     ['label' => 'artikel',  'url' => ['/tabel-artikel']],
                     ['label' => 'catatan medis pasien',  'url' => ['/tabel-catatan-medis-pasien']],
                     ['label' => 'jenis pemeriksaan',  'url' => ['/tabel-jenis-pemeriksaan']],
-                    ['label' => 'hasil pemeriksaan',  'url' => ['/tabel-hasil-pemeriksaan']],
-                    ['label' => 'jadwal',  'url' => ['/tabel-jadwal']],
                     ['label' => 'jadwal pemeriksaan',  'url' => ['/tabel-jadwal-pemeriksaan']],
-                    // ['label' => 'notifikasi',  'url' => ['/tabel-notifikasi']],
                     ['label' => 'pasien',  'url' => ['/tabel-pasien']],
                     ['label' => 'pegawai',  'url' => ['/tabel-pegawai']],
                     ['label' => 'penyakit',  'url' => ['/tabel-penyakit']],
                     ['label' => 'prediksi',  'url' => ['/tabel-prediksi']],
                     ['label' => 'decision tree',  'url' => ['/decision-tree']],
+                    ['label' => 'rule',  'url' => ['/tabel-rule']],];
+        if(Yii::$app->user->identity->id_role_pegawai == 1){
+            $items = [['label' => 'Menu', 'options' => ['class' => 'header']],
+                    ['label' => 'jadwal',  'url' => ['/tabel-jadwal']],
+                    ['label' => 'hasil pemeriksaan',  'url' => ['/tabel-hasil-pemeriksaan']]];
+        }
+                    ?>
+        <?= dmstr\widgets\Menu::widget(
+            [
+                'options' => ['class' => 'sidebar-menu'],
+                'items' => $items
+                    
+                    // ['label' => 'notifikasi',  'url' => ['/tabel-notifikasi']],
                     // ['label' => 'Debug', 'icon' => 'dashboard', 'url' => ['/debug']],
                     // ['label' => 'Login', 'url' => ['site/login'], 'visible' => Yii::$app->user->isGuest],
                     // [
@@ -74,7 +82,7 @@
                     //         ],
                     //     ],
                     // ],
-                ],
+                ,
             ]
         ) ?>
 

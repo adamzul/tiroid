@@ -43,13 +43,16 @@ $this->params['breadcrumbs'][] = $this->title;
                 if(array_key_exists('approved', $appointment)){
                     if($appointment['approved'] == true){
                         echo 'sudah dikonfirmasi';
+                        echo Html::a('Hapus', ['hapus', 'idPasien' => $idPasien], ['class' => 'btn btn-danger']);
                     }
                     else{
-                        echo Html::a('konfirmasi', ['konfirmasi', 'idPasien' => $idPasien], ['class' => 'btn btn-success']);
+                        echo Html::a('Konfirmasi', ['konfirmasi', 'idPasien' => $idPasien], ['class' => 'btn btn-success']);
+                        echo Html::a('Tolak', ['tolak', 'idPasien' => $idPasien], ['class' => 'btn btn-danger']);
                     }
                 }
                 else{
-                    echo Html::a('konfirmasi', ['konfirmasi', 'idPasien' => $idPasien], ['class' => 'btn btn-success']);
+                    echo Html::a('Konfirmasi', ['konfirmasi', 'idPasien' => $idPasien], ['class' => 'btn btn-success']);
+                    echo Html::a('Tolak', ['tolak', 'idPasien' => $idPasien], ['class' => 'btn btn-danger']);
                     }
                 ?>
                 </td>
