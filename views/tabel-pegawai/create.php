@@ -11,11 +11,15 @@ $this->params['breadcrumbs'][] = ['label' => 'Tabel Pegawais', 'url' => ['index'
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="tabel-pegawai-create">
-
-    <h1><?= Html::encode($this->title) ?></h1>
+	<div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title"><?= Html::encode($this->title) ?></h3>
+        </div>
+        <div class="panel-body">
 
     <?= $this->render('_form', [
         'model' => $model, 'upload' => $upload
     ]) ?>
-
+    	</div>
+    </div>
 </div>

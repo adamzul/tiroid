@@ -7,14 +7,16 @@ use app\models\DownloadImage;
 /* @var $this yii\web\View */
 /* @var $model app\Models\TabelPegawai */
 
-$this->title = $model->id_pegawai;
+$this->title = $model->id_pegawai." - ".$model->nama_pegawai;
 $this->params['breadcrumbs'][] = ['label' => 'Tabel Pegawais', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="tabel-pegawai-view">
-
-    <h1><?= Html::encode($this->title) ?></h1>
-
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title"><?= Html::encode($this->title) ?></h3>
+        </div>
+        <div class="panel-body">
     <p>
         <?= Html::a('Update', ['update', 'id' => $model->id_pegawai], ['class' => 'btn btn-primary']) ?>
         <?= Html::a('Delete', ['delete', 'id' => $model->id_pegawai], [
@@ -53,5 +55,6 @@ $this->params['breadcrumbs'][] = $this->title;
             ),
         ],
     ]) ?>
-
+        </div>
+    </div>
 </div>

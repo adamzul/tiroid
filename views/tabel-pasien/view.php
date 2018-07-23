@@ -30,10 +30,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'attributes' => [
             'id_pasien',
             'nama_pasien',
-            [
-                'attribute' => 'jenis_kelamin',
-                'value' => 'tabelJenisKelamin.jenis_kelamin'
-            ],
+            'tabelJenisKelamin.jenis_kelamin',
             'tanggal_lahir',
             'alamat',
             'email_pasien',

@@ -6,14 +6,16 @@ use yii\widgets\DetailView;
 /* @var $this yii\web\View */
 /* @var $model app\models\TabelPenyakit */
 
-$this->title = $model->id_penyakit;
+$this->title = $model->id_penyakit." - ". $model->nama_penyakit;
 $this->params['breadcrumbs'][] = ['label' => 'Tabel Penyakits', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="tabel-penyakit-view">
-
-    <h1><?= Html::encode($this->title) ?></h1>
-
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title"><?= Html::encode($this->title) ?></h3>
+        </div>
+        <div class="panel-body">
     <p>
         <?= Html::a('Update', ['update', 'id' => $model->id_penyakit], ['class' => 'btn btn-primary']) ?>
         <?= Html::a('Delete', ['delete', 'id' => $model->id_penyakit], [
@@ -32,6 +34,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'nama_penyakit',
             'deskripsi_penyakit:ntext',
         ],
-    ]) ?>
-
+    ]) ?>   
+        </div>
+    </div>
 </div>

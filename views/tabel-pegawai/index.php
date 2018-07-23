@@ -8,7 +8,7 @@ use app\models\DownloadImage;
 /* @var $searchModel app\models\TabelPegawaiSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Tabel Pegawais';
+$this->title = 'Pegawai';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="tabel-pegawai-index">
@@ -20,7 +20,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a('Create Tabel Pegawai', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Create  Pegawai', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 <?php Pjax::begin(); ?>    <?= GridView::widget([
         'dataProvider' => $dataProvider,

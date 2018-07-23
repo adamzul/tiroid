@@ -6,7 +6,7 @@ use yii\widgets\DetailView;
 /* @var $this yii\web\View */
 /* @var $model app\models\TabelJadwal */
 
-$this->title = $model->id_jadwal_dokter;
+$this->title = $model->id_jadwal_dokter." - ".$model->tabelPegawai->nama_pegawai;
 $this->params['breadcrumbs'][] = ['label' => 'Tabel Jadwals', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -31,11 +31,11 @@ $this->params['breadcrumbs'][] = $this->title;
         'model' => $model,
         'attributes' => [
             'id_jadwal_dokter',
-            'id_pegawai',
-            'id_hari_jadwal',
+            'tabelPegawai.nama_pegawai',
+            'tabelHari.hari',
             'jam_mulai_jadwal',
             'jam_berakhir_jadwal',
-            'ruang',
+            // 'ruang',
         ],
     ]) ?>
     </div>

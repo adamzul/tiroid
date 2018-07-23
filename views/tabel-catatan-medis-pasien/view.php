@@ -6,7 +6,7 @@ use yii\widgets\DetailView;
 /* @var $this yii\web\View */
 /* @var $model app\models\TabelCatatanMedisPasien */
 
-$this->title = $model->id_catatan_medis_pasien;
+$this->title = $model->id_catatan_medis_pasien." . " .$model->tabelPasien->nama_pasien;
 $this->params['breadcrumbs'][] = ['label' => 'Tabel Catatan Medis Pasiens', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -32,9 +32,9 @@ $this->params['breadcrumbs'][] = $this->title;
                 'model' => $model,
                 'attributes' => [
                     'id_catatan_medis_pasien',
-                    'id_penyakit',
-                    'id_pasien',
-                    'id_pegawai',
+                    'tabelPenyakit.nama_penyakit',
+                    'tabelPasien.nama_pasien',
+                    // 'id_pegawai',
                     'catatan:ntext',
                 ],
             ]) ?>

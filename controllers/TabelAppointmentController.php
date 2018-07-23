@@ -33,7 +33,7 @@ class TabelAppointmentController extends Controller
             ],
             'access' => [
                 'class' => AccessControl::className(),
-                'rules' => [['actions' => ['index', 'create', 'update', 'delete', 'view',],'allow' => true,'roles' => ['@'],
+                'rules' => [['actions' => ['index', 'create', 'update', 'delete', 'view', 'konfirmasi'],'allow' => true,'roles' => ['@'],
                             'matchCallback'=>function(){
                                 return (
                                     Yii::$app->user->identity->id_role_pegawai=='2'
@@ -60,6 +60,12 @@ class TabelAppointmentController extends Controller
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         $appointmentList = $this->connection->getValue();
+        foreach ($appointmentList as $key => $appointment) {
+            # code...
+            if(array_key_exists('approved', $appointment) && $appointment['approved'] == false){
+                unset($appointmentList[$key]);
+            }
+        }
 
         return $this->render('index', [
             'searchModel' => $searchModel,
@@ -131,13 +137,15 @@ class TabelAppointmentController extends Controller
     }
 
     public function actionKonfirmasi($idPasien){
-        $this->connection->getChild($idPasien)->getChild('confirmation')->set(true);
-        $appointmentApproved = $this->connection->getChild($idPasien);
+        $this->connection->getChild($idPasien)->getChild('approved')->set(true);
+        $appointmentApproved = $this->connection->getChild($idPasien)->getValue();
         $appointmentList = $this->connection->getValue();
         foreach ($appointmentList as $key => $appointment) {
             # code...
-            if(($appointment['confirmation'] == null && $appointment['idDoctor'] == $appointmentApproved['idDoctor'] && $appointment['date'] == $appointmentApproved['date'] ) && $key != $idPasien){
-                $this->connection->getChild($key)->remove();
+            if((!array_key_exists('approved', $appointment) && 
+                $appointment['idDoctor'] == $appointmentApproved['idDoctor'] && 
+                $appointment['date'] == $appointmentApproved['date'] ) && $key != $idPasien){
+                $this->connection->getChild($key)->getChild("approved")->set(false);
             }
         }
         return $this->redirect(['index']);

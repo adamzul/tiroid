@@ -2,7 +2,9 @@
 use yii\helpers\Html;
 ?>
 
-<?php echo $akurasi. '%'; ?>
+<?php 
+$this->title = '';
+echo '<h1>'.$akurasi. '%<h1>'; ?>
 
 <!-- <table>
 	<tbody>

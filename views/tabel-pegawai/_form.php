@@ -20,7 +20,7 @@ use app\models\TabelJenisKelamin;
 
     <?= $form->field($model, 'nama_pegawai')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'id_jenis_kelamin_pegawai')->dropDownList(ArrayHelper::map(TabelJenisKelamin::find()->all(), 'id_jenis_kelamin', 'jenis_kelamin')) ?>
+    <?= $form->field($model, 'id_jenis_kelamin_pegawai')->dropDownList(ArrayHelper::map(TabelJenisKelamin::find()->all(), 'id_jenis_kelamin', 'jenis_kelamin'))->label('Jenis Kelamin Pegawai') ?>
 
     <?= $form->field($model, 'tanggal_lahir_pegawai')->widget(DatePicker::classname(), 
     [
@@ -36,7 +36,7 @@ use app\models\TabelJenisKelamin;
 
     <?= $form->field($model, 'password_pegawai')->textInput(['maxlength' => true]) ?>
     
-    <?= $form->field($model, 'id_role_pegawai')->dropDownList(ArrayHelper::map(TabelRole::find()->all(), 'id_role', 'role')) ?>
+    <?= $form->field($model, 'id_role_pegawai')->dropDownList(ArrayHelper::map(TabelRole::find()->all(), 'id_role', 'role'))->label('Role Pegawai') ?>
     <?= $form->field($upload, 'imageFile')->fileInput()->label('Foto') ?>
     
 

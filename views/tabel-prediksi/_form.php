@@ -19,16 +19,18 @@ use app\models\TabelJenisKelamin;
     <?php $form = ActiveForm::begin(); ?>
 
     <?= $form->field($model, 'id_pasien')->dropDownList(ArrayHelper::map(TabelPasien::find()->all(), 'id_pasien', 'nama_pasien'))->label('Pasien') ?>
+    <?php if(!$model->isNewRecord) { ?>
 
-    <?= $form->field($model, 'jenis_kelamin')->dropDownList(ArrayHelper::map(TabelJenisKelamin::find()->all(), 'id_jenis_kelamin', 'jenis_kelamin'))->label('Jenis Kelamin') ?>
+    <?= $form->field($model, 'jenis_kelamin')->dropDownList(ArrayHelper::map(TabelJenisKelamin::find()->all(), 'jenis_kelamin', 'jenis_kelamin'))->label('Jenis Kelamin') ?>
 
     <?= $form->field($model, 'usia')->textInput() ?>
+    <?php } ?>
 
     <?= $form->field($model, 'tekanan_sistolik')->textInput() ?>
 
     <?= $form->field($model, 'tekanan_diastolik')->textInput() ?>
 
-    <?= $form->field($model, 'riwayat_penyakit_tiroid')->dropDownList(ArrayHelper::map($arrayRiwayat, 'riwayat', 'riwayat'))->label('Jenis Kelamin') ?>
+    <?= $form->field($model, 'riwayat_penyakit_tiroid')->dropDownList(ArrayHelper::map($arrayRiwayat, 'riwayat', 'riwayat')) ?>
 
     <?= $form->field($model, 'TSH')->textInput() ?>
 
@@ -42,7 +44,7 @@ use app\models\TabelJenisKelamin;
     <?= $form->field($model, 'catatan_dokter')->textarea(['rows' => 6]) ?>
 
     <div class="form-group">
-        <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
+        <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

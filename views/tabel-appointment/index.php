@@ -40,16 +40,16 @@ $this->params['breadcrumbs'][] = $this->title;
                 <td><?= $appointment['date'] ?></td>
                 <td>
                 <?php
-                if(array_key_exists('confirmation', $appointment)){
-                    if($appointment['confirmation'] == true){
+                if(array_key_exists('approved', $appointment)){
+                    if($appointment['approved'] == true){
                         echo 'sudah dikonfirmasi';
                     }
                     else{
-                        echo Html::a('belum dikonfirmasi', ['konfirmasi', 'idPasien' => $idPasien], ['class' => 'btn btn-success']);
+                        echo Html::a('konfirmasi', ['konfirmasi', 'idPasien' => $idPasien], ['class' => 'btn btn-success']);
                     }
                 }
                 else{
-                    echo Html::a('belum dikonfirmasi', ['konfirmasi', 'idPasien' => $idPasien], ['class' => 'btn btn-success']);
+                    echo Html::a('konfirmasi', ['konfirmasi', 'idPasien' => $idPasien], ['class' => 'btn btn-success']);
                     }
                 ?>
                 </td>

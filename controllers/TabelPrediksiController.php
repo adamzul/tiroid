@@ -77,7 +77,14 @@ class TabelPrediksiController extends Controller
         $model = new TabelPrediksi();
 
         if ($model->load(Yii::$app->request->post())) {
+            $pasien = TabelPasien::findOne($model->id_pasien);
+            $birthDate = explode("-", $pasien->tanggal_lahir);
+            $model->usia = (date("md", date("U", mktime(0, 0, 0, $birthDate[2], $birthDate[1], 
+                $birthDate[1]))) > date("md")? ((date("Y") - $birthDate[0]) - 1)
+                : (date("Y") - $birthDate[0]));
             $model->hasil_prediksi = (new Prediksi())->getPrediksi($model);
+            $jenisKelamin = TabelJenisKelamin::findOne($pasien->id_jenis_kelamin_pasien);
+            $model->jenis_kelamin =$jenisKelamin->jenis_kelamin;
             $model->save(false);
             $this->saveToFirebase($model);
             return $this->redirect(['view', 'id' => $model->id_prediksi]);
@@ -145,9 +152,9 @@ class TabelPrediksiController extends Controller
 
     private function saveToFirebase(TabelPrediksi $model){
         $pasien = TabelPasien::findOne($model->id_pasien);
-        $jenisKelamin = TabelJenisKelamin::findOne($model->jenisKelamin);
+        // $jenisKelamin = TabelJenisKelamin::findOne($model->jenisKelamin);
         $this->connection->getChild($pasien->id_firebase.'/'.$model->id_prediksi)
-            ->set(["name" => $pasien->nama_pasien, "gender" => $jenisKelamin->jenis_kelamin,
+            ->set(["name" => $pasien->nama_pasien, "gender" => $model->jenis_kelamin,
                 "age" => $model->usia, "thyroidHistory" => $model->riwayat_penyakit_tiroid, 
                 "diastolicPulse" => $model->tekanan_diastolik, "sistolicPulse" => $model->tekanan_sistolik,
                 "TSH" => $model->TSH, "T4" => $model->T4, "date" => $model->tanggal_input, "prediction" => $model->hasil_prediksi]); 

@@ -16,9 +16,9 @@ use app\models\TabelPasien;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'id_penyakit')->dropDownList(ArrayHelper::map(TabelPenyakit::find()->all(), 'id_penyakit', 'nama_penyakit')) ?>
+    <?= $form->field($model, 'id_penyakit')->dropDownList(ArrayHelper::map(TabelPenyakit::find()->all(), 'id_penyakit', 'nama_penyakit'))->label("Nama Penyakit") ?>
 
-    <?= $form->field($model, 'id_pasien')->dropDownList(ArrayHelper::map(TabelPasien::find()->all(), 'id_pasien', 'nama_pasien')) ?>
+    <?= $form->field($model, 'id_pasien')->dropDownList(ArrayHelper::map(TabelPasien::find()->all(), 'id_pasien', 'nama_pasien'))->label("Nama Pasien") ?>
 
     <?= $form->field($model, 'catatan')->textarea(['rows' => 6]) ?>
 

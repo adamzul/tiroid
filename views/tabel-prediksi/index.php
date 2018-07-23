@@ -20,7 +20,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a('Tambah Prediksi', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Create Prediksi', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?= GridView::widget([
@@ -35,10 +35,11 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute' => 'pasien',
                 'value' => 'tabelPasien.nama_pasien'
             ],
-            [
-                'attribute' => 'jenis_kelamin',
-                'value' => 'tabelJenisKelamin.jenis_kelamin'
-            ],
+            // [
+            //     'attribute' => 'jenis_kelamin',
+            //     'value' => 'tabelJenisKelamin.jenis_kelamin'
+            // ],
+            'jenis_kelamin',
             'usia',
             'tekanan_sistolik',
             'tekanan_diastolik',

@@ -6,7 +6,7 @@ use yii\widgets\DetailView;
 /* @var $this yii\web\View */
 /* @var $model app\Models\TabelJenisPemeriksaan */
 
-$this->title = $model->id_jenis_pemeriksaan;
+$this->title = $model->id_jenis_pemeriksaan." - ".$model->jenis_pemeriksaan;
 $this->params['breadcrumbs'][] = ['label' => 'Tabel Jenis Pemeriksaans', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
