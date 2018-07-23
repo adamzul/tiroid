@@ -182,7 +182,7 @@ class TabelArtikelController extends Controller
     public function actionDelete($id)
     {
         $model = $this->findModel($id);
-        if($model->foto != $defaultImage){
+        if($model->foto != $this->defaultImage){
             (new DeleteImage($this->dropboxDirectory, $model->foto))->delete();
         }
         $this->connection->getChild($id)->remove();
