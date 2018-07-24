@@ -6,7 +6,7 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\models\TabelCatatanMedisPasien */
 
-$this->title = 'Tambah Catatan Medis Pasien'." . " .$model->tabelPasien->nama_pasien;
+$this->title = 'Tambah Catatan Medis Pasien';
 $this->params['breadcrumbs'][] = ['label' => 'Tabel Catatan Medis Pasiens', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
