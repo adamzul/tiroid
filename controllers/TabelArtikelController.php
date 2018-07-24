@@ -149,7 +149,7 @@ class TabelArtikelController extends Controller
             try {
                 $upload->imageFile = UploadedFile::getInstance($upload, 'imageFile');
                 if($upload->upload()){
-                    if($model->foto != $defaultImage){
+                    if($model->foto != $this->defaultImage){
                         (new DeleteImage($this->dropboxDirectory, $model->foto))->delete();
                     }
                     $model->foto = $nameImage.'.'.$upload->imageFile->extension;
