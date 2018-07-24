@@ -79,7 +79,7 @@ class TabelPrediksiController extends Controller
         if ($model->load(Yii::$app->request->post())) {
             $pasien = TabelPasien::findOne($model->id_pasien);
             $birthDate = explode("-", $pasien->tanggal_lahir);
-            $model->usia = (date("md", date("U", mktime(0, 0, 0, $birthDate[2], $birthDate[1], 
+            $model->usia = (string)(date("md", date("U", mktime(0, 0, 0, $birthDate[2], $birthDate[1], 
                 $birthDate[1]))) > date("md")? ((date("Y") - $birthDate[0]) - 1)
                 : (date("Y") - $birthDate[0]));
             $model->hasil_prediksi = (new Prediksi())->getPrediksi($model);
