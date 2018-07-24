@@ -141,7 +141,7 @@ class TabelPasienController extends Controller
     public function actionDelete($id)
     {
         $model = $this->findModel($id);
-        $this->auth->deleteUser($model->id_pasien);
+        $this->auth->deleteUser($model->id_firebase);
         $model->delete();
         return $this->redirect(['index']);
     }
