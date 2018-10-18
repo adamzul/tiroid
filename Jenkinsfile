@@ -9,7 +9,6 @@ pipeline {
     stage('build') {
       steps {
         bat 'php --version'
-        sh 'composer install'
       }
     }
   }
