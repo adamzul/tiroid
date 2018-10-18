@@ -1,0 +1,39 @@
+{
+  "rules": {
+    
+      "schedule":{
+        "$uid":{
+          ".read":"auth.uid == $uid",
+          ".write":"auth.uid == $uid"
+        }
+      },
+      "checkUpResult":{
+        "$uid":{
+          ".read":"auth.uid == $uid"
+        }
+      },
+      "article":{
+        ".read":"true"
+      },
+      "doctor":{
+        ".read":"true"
+      },
+      "appointment":{
+        ".read": "true",
+        "$uid":{
+        	
+          ".write": "auth.uid == $uid"
+        }
+      },
+      "doctorSchedule":{
+        ".read": "true"
+      },
+    	"diagnose":{
+        "$uid":{
+          ".read":"auth.uid == $uid",
+          ".write":"auth.uid == $uid"
+        }
+      }
+    
+  }
+}
